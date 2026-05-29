@@ -1,0 +1,963 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.xctest/Contents/MacOS/QuranDailyCorePackageTests",
+      "packagePath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily",
+      "productName" : "QuranDailyCorePackageTests"
+    }
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.QuranDailyCore-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/sources",
+      "importPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/APIResponseModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/AlQuranAPIClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/AudioRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/BookmarkRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/QuranRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/DownloadService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/StorageService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/AppSettings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Ayah.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Bookmark.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Juz.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/SearchMode.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Surah.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Protocols/RepositoryProtocols.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/UseCases/QuranUseCases.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "QuranDailyCore",
+      "moduleOutputPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCore.swiftmodule",
+      "objects" : [
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/APIResponseModels.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AlQuranAPIClient.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AudioRepository.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/BookmarkRepository.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/QuranRepository.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/DownloadService.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/StorageService.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AppSettings.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Ayah.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Bookmark.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Juz.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/SearchMode.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Surah.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/RepositoryProtocols.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/QuranUseCases.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/include/QuranDailyCore-Swift.h",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "qurandaily"
+      ],
+      "outputFileMapPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/APIResponseModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AlQuranAPIClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AudioRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/BookmarkRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/QuranRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/DownloadService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/StorageService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AppSettings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Ayah.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Bookmark.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Juz.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/SearchMode.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Surah.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/RepositoryProtocols.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/QuranUseCases.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCore.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/APIResponseModels.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/AlQuranAPIClient.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/AudioRepository.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/BookmarkRepository.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/QuranRepository.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/DownloadService.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/StorageService.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/AppSettings.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Ayah.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Bookmark.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Juz.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/SearchMode.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Surah.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Protocols/RepositoryProtocols.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/UseCases/QuranUseCases.swift"
+      ],
+      "tempsPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.QuranDailyCorePackageTests-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/sources",
+      "importPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCoreTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "QuranDailyCorePackageTests",
+      "moduleOutputPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCorePackageTests.swiftmodule",
+      "objects" : [
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/include/QuranDailyCorePackageTests-Swift.h",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "qurandaily"
+      ],
+      "outputFileMapPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCorePackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.QuranDailyCoreTests-arm64-apple-macosx-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/sources",
+      "importPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AudioRepositoryTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AyahReferenceParserTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/DownloadQuranUseCaseTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/Mocks/TestFixtures.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/QuranRepositoryTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/SearchQuranUseCaseTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "QuranDailyCoreTests",
+      "moduleOutputPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCoreTests.swiftmodule",
+      "objects" : [
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests.swift.o",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "6",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "qurandaily"
+      ],
+      "outputFileMapPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules/QuranDailyCoreTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AudioRepositoryTests.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AyahReferenceParserTests.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/DownloadQuranUseCaseTests.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/Mocks/TestFixtures.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/QuranRepositoryTests.swift",
+        "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/SearchQuranUseCaseTests.swift"
+      ],
+      "tempsPath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "QuranDailyCore" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "QuranDailyCore",
+      "-package-name",
+      "qurandaily",
+      "-c",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/APIResponseModels.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/AlQuranAPIClient.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/AudioRepository.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/BookmarkRepository.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/QuranRepository.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/DownloadService.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/StorageService.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/AppSettings.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Ayah.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Bookmark.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Juz.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/SearchMode.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Surah.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Protocols/RepositoryProtocols.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/UseCases/QuranUseCases.swift",
+      "-I",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/include/QuranDailyCore-Swift.h",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "qurandaily",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "QuranDailyCorePackageTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "QuranDailyCorePackageTests",
+      "-package-name",
+      "qurandaily",
+      "-c",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.derived/runner.swift",
+      "-I",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/include/QuranDailyCorePackageTests-Swift.h",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "qurandaily",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "QuranDailyCoreTests" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "QuranDailyCoreTests",
+      "-package-name",
+      "qurandaily",
+      "-c",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AudioRepositoryTests.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AyahReferenceParserTests.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/DownloadQuranUseCaseTests.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/Mocks/TestFixtures.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/QuranRepositoryTests.swift",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/SearchQuranUseCaseTests.swift",
+      "-I",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "6",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "qurandaily",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "QuranDailyCore" : [
+
+    ],
+    "QuranDailyCorePackageTests" : [
+      "QuranDailyCoreTests",
+      "QuranDailyCore"
+    ],
+    "QuranDailyCoreTests" : [
+      "QuranDailyCore"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+    "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.derived/runner.swift" : {
+      "inputs" : [
+
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/APIResponseModels.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/API/AlQuranAPIClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/AudioRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/BookmarkRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Repositories/QuranRepository.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/DownloadService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Data/Services/StorageService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/AppSettings.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Ayah.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Bookmark.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Juz.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/SearchMode.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Models/Surah.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/Protocols/RepositoryProtocols.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDaily/Domain/UseCases/QuranUseCases.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/sources"
+    },
+    "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/sources"
+    },
+    "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/APIResponseModels.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AlQuranAPIClient.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AppSettings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/AudioRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Ayah.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Bookmark.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/BookmarkRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/DownloadService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Juz.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/QuranRepository.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/QuranUseCases.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/RepositoryProtocols.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/SearchMode.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/StorageService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCore.build/Surah.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCorePackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AudioRepositoryTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AyahReferenceParserTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/DownloadQuranUseCaseTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/Mocks/TestFixtures.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/QuranRepositoryTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/SearchQuranUseCaseTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/sources"
+    },
+    "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

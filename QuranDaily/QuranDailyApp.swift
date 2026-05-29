@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct QuranDailyApp: App {
+    private let container = AppContainer.shared
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView(container: container)
         }
     }
 }

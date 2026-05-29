@@ -1,0 +1,47 @@
+{
+  "": {
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/primary.swiftdeps"
+  },
+  "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AudioRepositoryTests.swift": {
+    "dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests.d",
+    "object": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests.swift.o",
+    "swiftmodule": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests.swiftdeps",
+    "diagnostics": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AudioRepositoryTests.dia"
+  },
+  "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/AyahReferenceParserTests.swift": {
+    "dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests.d",
+    "object": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests.swift.o",
+    "swiftmodule": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests.swiftdeps",
+    "diagnostics": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/AyahReferenceParserTests.dia"
+  },
+  "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/DownloadQuranUseCaseTests.swift": {
+    "dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests.d",
+    "object": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests.swift.o",
+    "swiftmodule": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests.swiftdeps",
+    "diagnostics": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/DownloadQuranUseCaseTests.dia"
+  },
+  "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/Mocks/TestFixtures.swift": {
+    "dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures.d",
+    "object": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures.swift.o",
+    "swiftmodule": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures~partial.swiftmodule",
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures.swiftdeps",
+    "diagnostics": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/TestFixtures.dia"
+  },
+  "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/QuranRepositoryTests.swift": {
+    "dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests.d",
+    "object": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests.swift.o",
+    "swiftmodule": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests.swiftdeps",
+    "diagnostics": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/QuranRepositoryTests.dia"
+  },
+  "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/QuranDailyTests/SearchQuranUseCaseTests.swift": {
+    "dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests.d",
+    "object": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests.swift.o",
+    "swiftmodule": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests.swiftdeps",
+    "diagnostics": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyCoreTests.build/SearchQuranUseCaseTests.dia"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyPackageTests.build/primary.swiftdeps"
+  },
+  "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyPackageTests.derived/runner.swift": {
+    "dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyPackageTests.build/runner.d",
+    "object": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyPackageTests.build/runner.swiftdeps",
+    "diagnostics": "/Users/ahsansmac/Documents/BitsVessels Projects/QuranDaily/.build/arm64-apple-macosx/debug/QuranDailyPackageTests.build/runner.dia"
+  }
+}
