@@ -44,8 +44,13 @@ protocol AudioPlayerProtocol: AnyObject {
     var currentSurahNumber: Int? { get }
     var currentAyahInSurah: Int? { get }
 
-    func playFullSurah(_ surahNumber: Int) async throws
-    func playSurah(_ surahNumber: Int, fromAyah ayahInSurah: Int, totalAyahs: Int) async throws
+    func playFullSurah(_ surahNumber: Int, stopsAtSurahEnd: Bool) async throws
+    func playSurah(
+        _ surahNumber: Int,
+        fromAyah ayahInSurah: Int,
+        totalAyahs: Int,
+        stopsAtSurahEnd: Bool
+    ) async throws
     func pause()
     func resume()
     func seek(to time: TimeInterval)

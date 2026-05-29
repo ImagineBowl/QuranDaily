@@ -8,6 +8,7 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
     private(set) var currentSurahNumber: Int?
     private(set) var currentAyahInSurah: Int?
     private var ayahSequenceEnd: Int?
+    private var stopsAtSurahEnd = false
     private let audioRepository: AudioRepositoryProtocol
     var onPlaybackUpdate: (@MainActor () -> Void)?
 
@@ -55,10 +56,12 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
         currentSurahNumber = nil
         currentAyahInSurah = nil
         ayahSequenceEnd = nil
+        stopsAtSurahEnd = false
         notifyPlaybackUpdate()
     }
 
-    func playFullSurah(_ surahNumber: Int) async throws {
+    func playFullSurah(_ surahNumber: Int, stopsAtSurahEnd: Bool = false) async throws {
+        self.stopsAtSurahEnd = stopsAtSurahEnd
         let url = await audioRepository.playbackURL(forSurah: surahNumber)
         try await startPlayback(
             url: url,
@@ -68,7 +71,13 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
         )
     }
 
-    func playSurah(_ surahNumber: Int, fromAyah ayahInSurah: Int, totalAyahs: Int) async throws {
+    func playSurah(
+        _ surahNumber: Int,
+        fromAyah ayahInSurah: Int,
+        totalAyahs: Int,
+        stopsAtSurahEnd: Bool = false
+    ) async throws {
+        self.stopsAtSurahEnd = stopsAtSurahEnd
         let url = try await audioRepository.ayahStreamingURL(
             surahNumber: surahNumber,
             ayahInSurah: ayahInSurah
@@ -150,9 +159,38 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor in
-                try? await self?.playNext()
+                await self?.handleCurrentItemEnded()
             }
         }
+    }
+
+    private func handleCurrentItemEnded() async {
+        if let end = ayahSequenceEnd,
+           let surah = currentSurahNumber,
+           let ayah = currentAyahInSurah,
+           ayah < end {
+            try? await playSurah(
+                surah,
+                fromAyah: ayah + 1,
+                totalAyahs: end,
+                stopsAtSurahEnd: stopsAtSurahEnd
+            )
+            return
+        }
+
+        if stopsAtSurahEnd {
+            finishCurrentSurahPlayback()
+            return
+        }
+
+        try? await playNext()
+    }
+
+    private func finishCurrentSurahPlayback() {
+        player?.pause()
+        player = nil
+        removeEndObserver()
+        notifyPlaybackUpdate()
     }
 
     private func removeEndObserver() {

@@ -210,10 +210,11 @@ final class SearchAudioViewModel {
                 try await audioPlayer.playSurah(
                     surahNumber,
                     fromAyah: fromAyah,
-                    totalAyahs: totalAyahs
+                    totalAyahs: totalAyahs,
+                    stopsAtSurahEnd: true
                 )
             } else {
-                try await audioPlayer.playFullSurah(surahNumber)
+                try await audioPlayer.playFullSurah(surahNumber, stopsAtSurahEnd: true)
             }
             startProgressTimer()
             syncPlaybackState()

@@ -3,6 +3,7 @@ import SwiftUI
 struct SurahDetailView: View {
     @Bindable var viewModel: SurahDetailViewModel
     var highlightedAyahInSurah: Int?
+    var onAyahTap: ((Int) -> Void)?
     @State private var visibleAyah: Int = 1
     @State private var didScrollToInitialAyah = false
 
@@ -24,6 +25,9 @@ struct SurahDetailView: View {
                                     isHighlighted: highlightedAyahInSurah == ayah.numberInSurah,
                                     onBookmark: {
                                         Task { await viewModel.toggleBookmark(for: ayah) }
+                                    },
+                                    onTap: onAyahTap.map { handler in
+                                        { handler(ayah.numberInSurah) }
                                     }
                                 )
                                 .id("ayah-\(ayah.numberInSurah)")
@@ -94,6 +98,7 @@ struct AyahCardView: View {
     let isBookmarked: Bool
     var isHighlighted = false
     let onBookmark: () -> Void
+    var onTap: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -131,5 +136,11 @@ struct AyahCardView: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius))
         .animation(.easeInOut(duration: 0.25), value: isHighlighted)
+        .contentShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius))
+        .onTapGesture {
+            onTap?()
+        }
+        .accessibilityAddTraits(onTap != nil ? .isButton : [])
+        .accessibilityHint(onTap != nil ? "Play recitation from this ayah" : "")
     }
 }

@@ -51,7 +51,15 @@ struct SurahReadListenView: View {
         if let detailViewModel {
             SurahDetailView(
                 viewModel: detailViewModel,
-                highlightedAyahInSurah: playbackHighlightedAyah
+                highlightedAyahInSurah: playbackHighlightedAyah,
+                onAyahTap: { ayahNumber in
+                    Task {
+                        await audioViewModel.playSurah(
+                            destination.surahNumber,
+                            fromAyah: ayahNumber
+                        )
+                    }
+                }
             )
         } else if let errorMessage {
             ContentUnavailableView(
