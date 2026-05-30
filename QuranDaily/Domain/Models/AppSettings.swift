@@ -23,16 +23,81 @@ enum AppThemeMode: String, Codable, CaseIterable, Sendable {
     }
 }
 
+enum ArabicFontChoice: String, Codable, CaseIterable, Sendable {
+    case amiriQuran
+    case systemSerif
+
+    var displayName: String {
+        switch self {
+        case .amiriQuran: "Amiri Quran"
+        case .systemSerif: "System Serif"
+        }
+    }
+
+    var postScriptName: String? {
+        switch self {
+        case .amiriQuran: "AmiriQuran-Regular"
+        case .systemSerif: nil
+        }
+    }
+}
+
+enum UrduFontChoice: String, Codable, CaseIterable, Sendable {
+    case notoNastaliq
+    case system
+
+    var displayName: String {
+        switch self {
+        case .notoNastaliq: "Noto Nastaliq Urdu"
+        case .system: "System"
+        }
+    }
+
+    var postScriptName: String? {
+        switch self {
+        case .notoNastaliq: "NotoNastaliqUrdu-Regular"
+        case .system: nil
+        }
+    }
+}
+
 struct AppSettings: Codable, Hashable, Sendable {
     var fontSize: Double
     var theme: AppThemeMode
     var showEnglishTranslation: Bool
+    var arabicFont: ArabicFontChoice
+    var urduFont: UrduFontChoice
 
     static let `default` = AppSettings(
         fontSize: 22,
         theme: .dark,
-        showEnglishTranslation: false
+        showEnglishTranslation: false,
+        arabicFont: .amiriQuran,
+        urduFont: .notoNastaliq
     )
+
+    init(
+        fontSize: Double,
+        theme: AppThemeMode,
+        showEnglishTranslation: Bool,
+        arabicFont: ArabicFontChoice = .amiriQuran,
+        urduFont: UrduFontChoice = .notoNastaliq
+    ) {
+        self.fontSize = fontSize
+        self.theme = theme
+        self.showEnglishTranslation = showEnglishTranslation
+        self.arabicFont = arabicFont
+        self.urduFont = urduFont
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        fontSize = try container.decode(Double.self, forKey: .fontSize)
+        theme = try container.decode(AppThemeMode.self, forKey: .theme)
+        showEnglishTranslation = try container.decodeIfPresent(Bool.self, forKey: .showEnglishTranslation) ?? false
+        arabicFont = try container.decodeIfPresent(ArabicFontChoice.self, forKey: .arabicFont) ?? .amiriQuran
+        urduFont = try container.decodeIfPresent(UrduFontChoice.self, forKey: .urduFont) ?? .notoNastaliq
+    }
 }
 
 enum DownloadProgress: Equatable, Sendable {

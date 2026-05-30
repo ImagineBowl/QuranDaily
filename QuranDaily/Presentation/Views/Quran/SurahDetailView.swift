@@ -21,6 +21,8 @@ struct SurahDetailView: View {
                                 AyahCardView(
                                     ayah: ayah,
                                     fontSize: viewModel.settings.fontSize,
+                                    arabicFont: viewModel.settings.arabicFont,
+                                    urduFont: viewModel.settings.urduFont,
                                     isBookmarked: viewModel.isBookmarked(ayah),
                                     isHighlighted: highlightedAyahInSurah == ayah.numberInSurah,
                                     onBookmark: {
@@ -95,6 +97,8 @@ struct SurahDetailView: View {
 struct AyahCardView: View {
     let ayah: Ayah
     let fontSize: Double
+    var arabicFont: ArabicFontChoice = .amiriQuran
+    var urduFont: UrduFontChoice = .notoNastaliq
     let isBookmarked: Bool
     var isHighlighted = false
     let onBookmark: () -> Void
@@ -118,13 +122,13 @@ struct AyahCardView: View {
             }
 
             Text(ayah.arabicText)
-                .font(AppTheme.arabicFont(size: fontSize + 4))
+                .font(AppTheme.arabicFont(size: fontSize + 4, choice: arabicFont))
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .lineSpacing(10)
 
             Text(ayah.urduText)
-                .font(AppTheme.bodyFont(size: fontSize))
+                .font(AppTheme.urduFont(size: fontSize, choice: urduFont))
                 .foregroundStyle(.primary)
                 .lineSpacing(8)
         }

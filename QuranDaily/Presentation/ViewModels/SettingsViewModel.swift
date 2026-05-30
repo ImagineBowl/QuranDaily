@@ -34,6 +34,16 @@ final class SettingsViewModel {
         await settingsRepository.saveSettings(settings)
     }
 
+    func updateArabicFont(_ font: ArabicFontChoice) async {
+        settings.arabicFont = font
+        await settingsRepository.saveSettings(settings)
+    }
+
+    func updateUrduFont(_ font: UrduFontChoice) async {
+        settings.urduFont = font
+        await settingsRepository.saveSettings(settings)
+    }
+
     func updateTheme(_ theme: AppThemeMode) async {
         settings.theme = theme
         await settingsRepository.saveSettings(settings)

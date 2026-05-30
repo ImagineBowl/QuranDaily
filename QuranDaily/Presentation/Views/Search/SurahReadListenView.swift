@@ -132,9 +132,13 @@ struct AudioMiniPlayerBar: View {
     var body: some View {
         VStack(spacing: 0) {
             if viewModel.duration > 0 {
-                ProgressView(value: viewModel.currentTime / max(viewModel.duration, 1))
-                    .tint(AppTheme.accent)
-                    .padding(.horizontal)
+                SmoothPlaybackProgressView(
+                    currentTime: viewModel.currentTime,
+                    duration: viewModel.duration,
+                    isPlaying: viewModel.isPlaying,
+                    trackID: viewModel.playbackTrackID
+                )
+                .padding(.horizontal)
             }
 
             Divider()

@@ -3,6 +3,7 @@ import SwiftUI
 struct SurahListView: View {
     @Bindable var viewModel: QuranViewModel
     let container: AppContainer
+    let appSettings: AppSettings
 
     @State private var showJuzPicker = false
     @State private var selectedJuz: Juz?
@@ -46,7 +47,10 @@ struct SurahListView: View {
                                 NavigationLink {
                                     destinationSurah(surahNumber: surah.number)
                                 } label: {
-                                    SurahRowView(surah: surah)
+                                    SurahRowView(
+                                        surah: surah,
+                                        arabicFont: appSettings.arabicFont
+                                    )
                                 }
                             }
                         }
@@ -103,6 +107,7 @@ struct SurahListView: View {
 
 struct SurahRowView: View {
     let surah: Surah
+    var arabicFont: ArabicFontChoice = .amiriQuran
 
     var body: some View {
         HStack(spacing: 16) {
@@ -123,7 +128,7 @@ struct SurahRowView: View {
             Spacer()
 
             Text(surah.name)
-                .font(AppTheme.arabicFont(size: 22))
+                .font(AppTheme.arabicFont(size: 22, choice: arabicFont))
                 .multilineTextAlignment(.trailing)
         }
         .padding(.vertical, 8)

@@ -31,13 +31,18 @@ struct MainTabView: View {
         TabView {
             SurahListView(
                 viewModel: quranViewModel,
-                container: container
+                container: container,
+                appSettings: appSettings
             )
             .tabItem {
                 Label("Quran", systemImage: "book.fill")
             }
 
-            SearchAudioView(viewModel: searchViewModel, container: container)
+            SearchAudioView(
+                viewModel: searchViewModel,
+                container: container,
+                appSettings: appSettings
+            )
                 .tabItem {
                     Label("Search & Audio", systemImage: "magnifyingglass")
                 }

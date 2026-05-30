@@ -25,6 +25,28 @@ struct SettingsView: View {
                         .tint(AppTheme.accent)
                     }
                     .padding(.vertical, 8)
+
+                    Picker("Arabic Font", selection: Binding(
+                        get: { viewModel.settings.arabicFont },
+                        set: { newValue in
+                            Task { await viewModel.updateArabicFont(newValue) }
+                        }
+                    )) {
+                        ForEach(ArabicFontChoice.allCases, id: \.self) { font in
+                            Text(font.displayName).tag(font)
+                        }
+                    }
+
+                    Picker("Urdu Font", selection: Binding(
+                        get: { viewModel.settings.urduFont },
+                        set: { newValue in
+                            Task { await viewModel.updateUrduFont(newValue) }
+                        }
+                    )) {
+                        ForEach(UrduFontChoice.allCases, id: \.self) { font in
+                            Text(font.displayName).tag(font)
+                        }
+                    }
                 }
 
                 Section("Appearance") {

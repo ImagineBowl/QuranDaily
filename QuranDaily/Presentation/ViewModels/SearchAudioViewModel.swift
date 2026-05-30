@@ -87,6 +87,10 @@ final class SearchAudioViewModel {
         return surahs.first { $0.number == number }?.englishName ?? "Surah \(number)"
     }
 
+    var playbackTrackID: String {
+        "\(currentSurahNumber ?? 0)-\(currentAyahInSurah ?? 0)-\(duration)"
+    }
+
     var textSearchResults: [SearchResult] {
         results.filter { $0.matchType == .text }
     }
@@ -281,7 +285,7 @@ final class SearchAudioViewModel {
 
     private func startProgressTimer() {
         stopProgressTimer()
-        let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+        let timer = Timer.scheduledTimer(withTimeInterval: AppTheme.playbackDriftSyncInterval, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.syncPlaybackState()
             }

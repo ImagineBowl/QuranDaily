@@ -3,6 +3,7 @@ import SwiftUI
 struct SearchAudioView: View {
     @Bindable var viewModel: SearchAudioViewModel
     let container: AppContainer
+    let appSettings: AppSettings
 
     @State private var navigationPath = NavigationPath()
     @State private var showAudioSheet = false
@@ -114,7 +115,10 @@ struct SearchAudioView: View {
                 if !viewModel.matchingSurahs.isEmpty {
                     Section {
                         ForEach(viewModel.matchingSurahs) { surah in
-                            SurahSearchResultRow(surah: surah) {
+                            SurahSearchResultRow(
+                                surah: surah,
+                                arabicFont: appSettings.arabicFont
+                            ) {
                                 openReadAndListen(
                                     surahNumber: surah.number,
                                     ayahNumber: 1
@@ -131,7 +135,11 @@ struct SearchAudioView: View {
                 if !viewModel.ayahReferenceResults.isEmpty {
                     Section {
                         ForEach(viewModel.ayahReferenceResults) { result in
-                            AyahSearchResultRow(result: result) {
+                            AyahSearchResultRow(
+                                result: result,
+                                arabicFont: appSettings.arabicFont,
+                                urduFont: appSettings.urduFont
+                            ) {
                                 openReadAndListen(
                                     surahNumber: result.surahNumber,
                                     ayahNumber: result.ayahNumber
@@ -154,7 +162,11 @@ struct SearchAudioView: View {
                                     ayahNumber: result.ayahNumber
                                 )
                             } label: {
-                                SearchResultRowView(result: result)
+                                SearchResultRowView(
+                                    result: result,
+                                    arabicFont: appSettings.arabicFont,
+                                    urduFont: appSettings.urduFont
+                                )
                             }
                             .buttonStyle(.plain)
                         }
@@ -198,11 +210,12 @@ struct SearchAudioView: View {
 
 struct SurahSearchResultRow: View {
     let surah: Surah
+    var arabicFont: ArabicFontChoice = .amiriQuran
     let onReadAndListen: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SurahRowView(surah: surah)
+            SurahRowView(surah: surah, arabicFont: arabicFont)
 
             Button(action: onReadAndListen) {
                 Label("Read & Listen", systemImage: "book.and.waveform.fill")
@@ -217,6 +230,8 @@ struct SurahSearchResultRow: View {
 
 struct AyahSearchResultRow: View {
     let result: SearchResult
+    var arabicFont: ArabicFontChoice = .amiriQuran
+    var urduFont: UrduFontChoice = .notoNastaliq
     let onReadAndListen: () -> Void
 
     var body: some View {
@@ -237,13 +252,13 @@ struct AyahSearchResultRow: View {
                 }
 
                 Text(result.arabicText)
-                    .font(AppTheme.arabicFont(size: 22))
+                    .font(AppTheme.arabicFont(size: 22, choice: arabicFont))
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .trailing)
 
                 if !result.urduText.isEmpty {
                     Text(result.urduText)
-                        .font(AppTheme.bodyFont(size: 18))
+                        .font(AppTheme.urduFont(size: 18, choice: urduFont))
                         .foregroundStyle(.secondary)
                 }
             }
@@ -375,16 +390,21 @@ struct AudioPlayerSheet: View {
     private var playbackControls: some View {
         VStack(spacing: 12) {
             if viewModel.duration > 0 {
-                Slider(
-                    value: Binding(
-                        get: { viewModel.currentTime / max(viewModel.duration, 1) },
-                        set: { viewModel.seek(to: $0) }
-                    )
+                SmoothPlaybackSlider(
+                    currentTime: viewModel.currentTime,
+                    duration: viewModel.duration,
+                    isPlaying: viewModel.isPlaying,
+                    trackID: viewModel.playbackTrackID,
+                    onSeek: { viewModel.seek(to: $0) }
                 )
-                .tint(AppTheme.accent)
 
                 HStack {
-                    Text(formatTime(viewModel.currentTime))
+                    PlaybackElapsedTimeLabel(
+                        currentTime: viewModel.currentTime,
+                        duration: viewModel.duration,
+                        isPlaying: viewModel.isPlaying,
+                        trackID: viewModel.playbackTrackID
+                    )
                     Spacer()
                     Text(formatTime(viewModel.duration))
                 }
@@ -460,6 +480,8 @@ struct SurahAudioPickerView: View {
 
 struct SearchResultRowView: View {
     let result: SearchResult
+    var arabicFont: ArabicFontChoice = .amiriQuran
+    var urduFont: UrduFontChoice = .notoNastaliq
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -472,14 +494,14 @@ struct SearchResultRowView: View {
             }
 
             Text(result.arabicText)
-                .font(AppTheme.arabicFont(size: 20))
+                .font(AppTheme.arabicFont(size: 20, choice: arabicFont))
                 .lineLimit(2)
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
             if !result.urduText.isEmpty {
                 Text(result.urduText)
-                    .font(AppTheme.bodyFont(size: 18))
+                    .font(AppTheme.urduFont(size: 18, choice: urduFont))
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
