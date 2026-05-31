@@ -1,8 +1,8 @@
 import Foundation
 
 enum SearchMode: String, CaseIterable, Identifiable, Sendable {
-    case surah
     case ayah
+    case surah
     case text
 
     var id: String { rawValue }
@@ -18,7 +18,7 @@ enum SearchMode: String, CaseIterable, Identifiable, Sendable {
     var searchPrompt: String {
         switch self {
         case .surah: "Surah name or number"
-        case .ayah: "Yaseen:35, 36:35, or 262"
+        case .ayah: "Filter surahs"
         case .text: "Arabic or Urdu text"
         }
     }
@@ -28,9 +28,16 @@ enum SearchMode: String, CaseIterable, Identifiable, Sendable {
         case .surah:
             "Type a surah name or number, then tap Read & Listen."
         case .ayah:
-            "Use a custom reference like Yaseen:35, a numeric reference like 36:35, or global ayah number 262."
+            "Choose a surah and ayah number below, then tap Read & Listen."
         case .text:
             "Search for matching words or phrases inside ayah text."
+        }
+    }
+
+    var usesTextSearchBar: Bool {
+        switch self {
+        case .surah, .text: true
+        case .ayah: false
         }
     }
 }

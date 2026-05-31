@@ -9,7 +9,7 @@ final class SearchAudioViewModel {
     private let audioPlayer: AudioPlayerService
 
     var query = ""
-    var searchMode: SearchMode = .surah
+    var searchMode: SearchMode = .ayah
     var results: [SearchResult] = []
     var surahs: [Surah] = []
     var selectedSurahNumber = 1
