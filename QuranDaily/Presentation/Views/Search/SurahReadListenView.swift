@@ -58,6 +58,7 @@ struct SurahReadListenView: View {
             SurahDetailView(
                 viewModel: detailViewModel,
                 highlightedAyahInSurah: playbackHighlightedAyah,
+                isAudioPlaying: audioViewModel.isPlaying,
                 onAyahTap: { ayahNumber in
                     Task {
                         await audioViewModel.playSurah(

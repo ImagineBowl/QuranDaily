@@ -3,10 +3,21 @@ import SwiftUI
 struct SurahDetailView: View {
     @Bindable var viewModel: SurahDetailViewModel
     var highlightedAyahInSurah: Int?
+    var isAudioPlaying = false
     var onAyahTap: ((Int) -> Void)?
     var tracksReadingPosition = true
-    @State private var visibleAyah: Int = 1
+    @State private var visibleAyahs: Set<Int> = []
     @State private var didScrollToInitialAyah = false
+    @State private var saveTask: Task<Void, Never>?
+
+    private var topVisibleAyah: Int? {
+        visibleAyahs.min()
+    }
+
+    private var showJumpToPlaying: Bool {
+        guard isAudioPlaying, let target = highlightedAyahInSurah else { return false }
+        return !visibleAyahs.contains(target)
+    }
 
     var body: some View {
         Group {
@@ -35,24 +46,39 @@ struct SurahDetailView: View {
                                 )
                                 .id("ayah-\(ayah.numberInSurah)")
                                 .onAppear {
-                                    visibleAyah = ayah.numberInSurah
+                                    visibleAyahs.insert(ayah.numberInSurah)
+                                }
+                                .onDisappear {
+                                    visibleAyahs.remove(ayah.numberInSurah)
                                 }
                             }
                         }
                         .padding()
                     }
+                    .overlay(alignment: .bottom) {
+                        jumpToPlayingButton(using: proxy)
+                    }
+                    .animation(.easeInOut(duration: 0.2), value: showJumpToPlaying)
                     .onChange(of: viewModel.ayahs.count) { _, count in
                         guard count > 0 else { return }
                         scrollToInitialAyah(using: proxy)
                     }
                     .onChange(of: highlightedAyahInSurah) { _, ayahNumber in
                         guard let ayahNumber else { return }
+                        // Only auto-follow while the user is still viewing the playing
+                        // ayah. Once they scroll away it stays put and the jump button
+                        // appears, so we don't yank them back mid-read.
+                        guard visibleAyahs.contains(ayahNumber) else { return }
                         scrollToAyah(ayahNumber, using: proxy, animated: true)
                     }
+                    .onChange(of: topVisibleAyah) { _, _ in
+                        scheduleReadingPositionSave()
+                    }
                     .onDisappear {
-                        guard tracksReadingPosition else { return }
+                        saveTask?.cancel()
+                        guard tracksReadingPosition, let ayah = topVisibleAyah else { return }
                         Task {
-                            await viewModel.saveReadingPosition(ayahNumber: visibleAyah)
+                            await viewModel.saveReadingPosition(ayahNumber: ayah)
                         }
                     }
                 }
@@ -62,6 +88,46 @@ struct SurahDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await viewModel.load()
+        }
+    }
+
+    @ViewBuilder
+    private func jumpToPlayingButton(using proxy: ScrollViewProxy) -> some View {
+        if showJumpToPlaying, let target = highlightedAyahInSurah {
+            Button {
+                scrollToAyah(target, using: proxy, animated: true)
+            } label: {
+                Label("Now Playing", systemImage: jumpIcon(for: target))
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(AppTheme.accent, in: Capsule())
+                    .shadow(color: .black.opacity(0.2), radius: 6, y: 2)
+            }
+            .buttonStyle(.plain)
+            .padding(.bottom, 12)
+            .transition(.move(edge: .bottom).combined(with: .opacity))
+            .accessibilityLabel("Scroll to currently playing ayah")
+        }
+    }
+
+    private func jumpIcon(for target: Int) -> String {
+        if let top = topVisibleAyah, target < top {
+            return "arrow.up"
+        }
+        return "arrow.down"
+    }
+
+    private func scheduleReadingPositionSave() {
+        guard tracksReadingPosition, let ayah = topVisibleAyah else { return }
+        saveTask?.cancel()
+        saveTask = Task {
+            // Debounce so rapid scrolling (and the initial programmatic scroll)
+            // only persists the settled top-visible ayah.
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
+            await viewModel.saveReadingPosition(ayahNumber: ayah)
         }
     }
 
