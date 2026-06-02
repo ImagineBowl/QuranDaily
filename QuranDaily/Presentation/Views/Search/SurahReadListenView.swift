@@ -30,7 +30,9 @@ struct SurahReadListenView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    PlaybackToolbarButton(viewModel: audioViewModel)
+                    PlaybackToolbarButton(viewModel: audioViewModel) {
+                        await togglePlaybackForThisSurah()
+                    }
                 }
             }
             .sheet(isPresented: $showAudioSheet) {
@@ -110,6 +112,20 @@ struct SurahReadListenView: View {
         }
     }
 
+    private func togglePlaybackForThisSurah() async {
+        if audioViewModel.currentSurahNumber == destination.surahNumber {
+            // Already this surah (playing or paused) — pause/resume in place.
+            await audioViewModel.togglePlayback()
+        } else {
+            // Fresh start for this surah — begin at the ayah we opened to so the
+            // resumed ayah highlights and audio plays from there.
+            await audioViewModel.playSurah(
+                destination.surahNumber,
+                fromAyah: destination.ayahNumber
+            )
+        }
+    }
+
     private var playbackHighlightedAyah: Int? {
         guard audioViewModel.currentSurahNumber == destination.surahNumber else { return nil }
         return audioViewModel.currentAyahInSurah
@@ -118,10 +134,17 @@ struct SurahReadListenView: View {
 
 struct PlaybackToolbarButton: View {
     var viewModel: SearchAudioViewModel
+    var onToggle: (() async -> Void)?
 
     var body: some View {
         Button {
-            Task { await viewModel.togglePlayback() }
+            Task {
+                if let onToggle {
+                    await onToggle()
+                } else {
+                    await viewModel.togglePlayback()
+                }
+            }
         } label: {
             Image(systemName: viewModel.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                 .font(.title2)
