@@ -126,7 +126,8 @@ final class SettingsViewModelTests: XCTestCase {
                     apiClient: MockAPIClient(),
                     quranRepository: QuranRepository(storage: storage)
                 )
-            )
+            ),
+            tipJarService: MockTipJarService()
         )
 
         await viewModel.load()

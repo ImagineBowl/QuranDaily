@@ -29,6 +29,7 @@ let package = Package(
                 "App/AppContainer.swift",
                 "Presentation",
                 "Data/Services/AudioPlayerService.swift",
+                "Products.storekit",
             ]
         ),
         .testTarget(

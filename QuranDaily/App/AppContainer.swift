@@ -7,6 +7,7 @@ final class AppContainer {
     let storageService: StorageServiceProtocol
     let apiClient: APIClientProtocol
     let downloadService: DownloadServiceProtocol
+    let tipJarService: TipJarServiceProtocol
 
     let quranRepository: QuranRepositoryProtocol
     let audioRepository: AudioRepositoryProtocol
@@ -25,7 +26,8 @@ final class AppContainer {
     init(
         storageService: StorageServiceProtocol? = nil,
         apiClient: APIClientProtocol? = nil,
-        downloadService: DownloadServiceProtocol? = nil
+        downloadService: DownloadServiceProtocol? = nil,
+        tipJarService: TipJarServiceProtocol? = nil
     ) {
         let storage = storageService ?? StorageService()
         let api = apiClient ?? AlQuranAPIClient()
@@ -34,6 +36,7 @@ final class AppContainer {
         self.storageService = storage
         self.apiClient = api
         self.downloadService = downloader
+        self.tipJarService = tipJarService ?? TipJarService()
 
         let quranRepo = QuranRepository(storage: storage)
         let audioRepo = AudioRepository(

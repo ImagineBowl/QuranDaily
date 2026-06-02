@@ -23,7 +23,8 @@ struct MainTabView: View {
         _settingsViewModel = State(initialValue: SettingsViewModel(
             settingsRepository: container.settingsRepository,
             storageInfoUseCase: container.storageInfoUseCase,
-            clearCacheUseCase: container.clearCacheUseCase
+            clearCacheUseCase: container.clearCacheUseCase,
+            tipJarService: container.tipJarService
         ))
     }
 

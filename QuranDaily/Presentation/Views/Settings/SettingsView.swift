@@ -88,6 +88,55 @@ struct SettingsView: View {
                     }
                 }
 
+                Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Help keep QuranDaily free")
+                            .font(AppTheme.titleFont(size: 20))
+
+                        Text(
+                            "QuranDaily is free with no account required. If it helps your daily reading, you can optionally leave a tip to support its development."
+                        )
+                        .font(AppTheme.bodyFont(size: 15))
+                        .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
+
+                    if viewModel.tipOptions.isEmpty {
+                        Text("Tip options are unavailable right now.")
+                            .font(AppTheme.bodyFont(size: 15))
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(viewModel.tipOptions) { option in
+                            Button {
+                                Task { await viewModel.tip(option) }
+                            } label: {
+                                HStack(spacing: 12) {
+                                    Image(systemName: "heart.fill")
+                                        .foregroundStyle(AppTheme.accent)
+                                    Text(option.displayName)
+                                        .font(AppTheme.bodyFont(size: 17))
+                                        .foregroundStyle(.primary)
+                                    Spacer()
+                                    Text(option.displayPrice)
+                                        .font(.system(size: 15, weight: .semibold))
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 6)
+                                        .foregroundStyle(AppTheme.accent)
+                                        .background(AppTheme.accent.opacity(0.15))
+                                        .clipShape(Capsule())
+                                }
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(viewModel.isPurchasing)
+                        }
+                    }
+                } header: {
+                    Text("Support")
+                } footer: {
+                    Text("Completely optional. No features are locked behind support.")
+                }
+
                 Section("App Info") {
                     LabeledContent("App") {
                         Text("QuranDaily")
@@ -111,6 +160,7 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .task {
                 await viewModel.load()
+                await viewModel.loadTips()
                 appSettings = viewModel.settings
             }
             .onChange(of: viewModel.settings) { _, newValue in

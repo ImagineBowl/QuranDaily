@@ -1,4 +1,5 @@
 import Foundation
+import StoreKit
 #if SWIFT_PACKAGE
 @testable import QuranDailyCore
 #else
@@ -91,6 +92,22 @@ final class MockDownloadService: DownloadServiceProtocol, @unchecked Sendable {
             withIntermediateDirectories: true
         )
         try data.write(to: destination)
+    }
+}
+
+final class MockTipJarService: TipJarServiceProtocol, @unchecked Sendable {
+    var products: [Product] = []
+    var purchaseResult = true
+    var shouldThrow = false
+
+    func loadProducts() async throws -> [Product] {
+        if shouldThrow { throw QuranError.invalidResponse }
+        return products
+    }
+
+    func purchase(_ product: Product) async throws -> Bool {
+        if shouldThrow { throw QuranError.invalidResponse }
+        return purchaseResult
     }
 }
 
