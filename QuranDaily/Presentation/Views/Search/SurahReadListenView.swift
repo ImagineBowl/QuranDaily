@@ -20,6 +20,7 @@ struct SurahReadListenView: View {
     var body: some View {
         surahContent
             .background(AppTheme.background)
+            .toolbar(.hidden, for: .tabBar)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if audioViewModel.showMiniPlayer {
                     AudioMiniPlayerBar(viewModel: audioViewModel) {

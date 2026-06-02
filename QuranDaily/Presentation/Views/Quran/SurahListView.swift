@@ -8,6 +8,8 @@ struct SurahListView: View {
 
     @State private var path = NavigationPath()
     @State private var showJuzPicker = false
+    @State private var showAudioSheet = false
+    @State private var showSurahPicker = false
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -84,6 +86,30 @@ struct SurahListView: View {
                 JuzPickerView(juzs: viewModel.juzs, surahs: viewModel.surahs) { juz in
                     showJuzPicker = false
                     openReader(surahNumber: juz.startSurah, ayahNumber: juz.startAyah)
+                }
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if path.isEmpty && audioViewModel.showMiniPlayer {
+                    AudioMiniPlayerBar(viewModel: audioViewModel) {
+                        showAudioSheet = true
+                    }
+                }
+            }
+            .sheet(isPresented: $showAudioSheet) {
+                AudioPlayerSheet(
+                    viewModel: audioViewModel,
+                    showSurahPicker: $showSurahPicker
+                )
+            }
+            .sheet(isPresented: $showSurahPicker) {
+                SurahAudioPickerView(surahs: audioViewModel.surahs) { surah in
+                    audioViewModel.selectedSurahNumber = surah.number
+                    showSurahPicker = false
+                }
+            }
+            .onChange(of: path) { _, newPath in
+                if newPath.isEmpty {
+                    Task { await viewModel.refreshReadingPosition() }
                 }
             }
             .task {

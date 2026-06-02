@@ -34,4 +34,8 @@ final class QuranViewModel {
 
         isLoading = false
     }
+
+    func refreshReadingPosition() async {
+        readingPosition = await readingPositionRepository.fetchPosition()
+    }
 }
