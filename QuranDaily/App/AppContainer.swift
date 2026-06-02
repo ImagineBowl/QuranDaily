@@ -14,6 +14,7 @@ final class AppContainer {
     let bookmarkRepository: BookmarkRepositoryProtocol
     let readingPositionRepository: ReadingPositionRepositoryProtocol
     let settingsRepository: SettingsRepositoryProtocol
+    let recentListenRepository: RecentListenRepositoryProtocol
 
     let fetchQuranUseCase: FetchQuranUseCase
     let downloadQuranUseCase: DownloadQuranUseCase
@@ -51,6 +52,7 @@ final class AppContainer {
         self.bookmarkRepository = BookmarkRepository(storage: storage)
         self.readingPositionRepository = ReadingPositionRepository(storage: storage)
         self.settingsRepository = SettingsRepository(storage: storage)
+        self.recentListenRepository = RecentListenRepository(storage: storage)
 
         self.fetchQuranUseCase = FetchQuranUseCase(quranRepository: quranRepo)
         self.downloadQuranUseCase = DownloadQuranUseCase(

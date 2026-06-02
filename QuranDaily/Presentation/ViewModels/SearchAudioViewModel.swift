@@ -7,6 +7,7 @@ final class SearchAudioViewModel {
     private let fetchQuranUseCase: FetchQuranUseCase
     private let audioRepository: AudioRepositoryProtocol
     private let audioPlayer: AudioPlayerService
+    private let recentListenRepository: RecentListenRepositoryProtocol
 
     var query = ""
     var searchMode: SearchMode = .ayah
@@ -24,6 +25,7 @@ final class SearchAudioViewModel {
     var isPlaying = false
     var currentTime: TimeInterval = 0
     var duration: TimeInterval = 0
+    var recentListens: [RecentListen] = []
 
     private var progressTimer: Timer?
     private var searchTask: Task<Void, Never>?
@@ -32,12 +34,14 @@ final class SearchAudioViewModel {
         searchQuranUseCase: SearchQuranUseCase,
         fetchQuranUseCase: FetchQuranUseCase,
         audioRepository: AudioRepositoryProtocol,
-        audioPlayer: AudioPlayerService
+        audioPlayer: AudioPlayerService,
+        recentListenRepository: RecentListenRepositoryProtocol
     ) {
         self.searchQuranUseCase = searchQuranUseCase
         self.fetchQuranUseCase = fetchQuranUseCase
         self.audioRepository = audioRepository
         self.audioPlayer = audioPlayer
+        self.recentListenRepository = recentListenRepository
         audioPlayer.onPlaybackUpdate = { [weak self] in
             self?.syncPlaybackState()
         }
@@ -130,6 +134,7 @@ final class SearchAudioViewModel {
 
         let downloaded = await audioRepository.downloadedSurahNumbers()
         downloadedSurahs = Set(downloaded)
+        recentListens = await recentListenRepository.fetchRecent()
         syncPlaybackState()
     }
 
@@ -222,6 +227,12 @@ final class SearchAudioViewModel {
             }
             startProgressTimer()
             syncPlaybackState()
+            let name = surahs.first { $0.number == surahNumber }?.englishName ?? "Surah \(surahNumber)"
+            recentListens = await recentListenRepository.record(
+                surahNumber: surahNumber,
+                surahName: name,
+                ayahNumber: fromAyah ?? 1
+            )
         } catch {
             audioErrorMessage = error.localizedDescription
             syncPlaybackState()

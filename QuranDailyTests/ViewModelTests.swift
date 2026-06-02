@@ -53,7 +53,8 @@ final class SearchAudioViewModelTests: XCTestCase {
                 quranRepository: QuranRepository(storage: storage)
             ),
             audioRepository: audioRepository,
-            audioPlayer: audioPlayer
+            audioPlayer: audioPlayer,
+            recentListenRepository: RecentListenRepository(storage: storage)
         )
 
         viewModel.selectedSurahNumber = 1
@@ -92,7 +93,8 @@ final class SearchAudioViewModelTests: XCTestCase {
                 quranRepository: QuranRepository(storage: storage)
             ),
             audioRepository: audioRepository,
-            audioPlayer: audioPlayer
+            audioPlayer: audioPlayer,
+            recentListenRepository: RecentListenRepository(storage: storage)
         )
 
         let playbackURL = await audioRepository.playbackURL(forSurah: 1)

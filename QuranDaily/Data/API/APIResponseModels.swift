@@ -71,6 +71,7 @@ enum StoragePaths {
     static let bookmarks = "bookmarks.json"
     static let settings = "settings.json"
     static let readingPosition = "reading_position.json"
+    static let recentListens = "recent_listens.json"
     static let audioDirectory = "Audio"
 }
 

@@ -5,200 +5,79 @@ struct SearchAudioView: View {
     let container: AppContainer
     let appSettings: AppSettings
 
-    @Environment(\.dismissSearch) private var dismissSearch
     @State private var navigationPath = NavigationPath()
     @State private var showAudioSheet = false
     @State private var showSurahPicker = false
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            VStack(spacing: 0) {
-                Picker("Search filter", selection: $viewModel.searchMode) {
-                    ForEach(SearchMode.allCases) { mode in
-                        Text(mode.title).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .padding(.horizontal)
-                .padding(.bottom, 6)
-                .onChange(of: viewModel.searchMode) { _, newMode in
-                    if newMode == .ayah {
-                        viewModel.query = ""
-                        viewModel.results = []
-                        viewModel.searchErrorMessage = nil
-                        viewModel.isSearching = false
-                    } else {
-                        viewModel.scheduleSearch()
-                    }
-                }
-
-                resultsSection
-            }
-            .conditionalSearchable(
-                isEnabled: viewModel.searchMode.usesTextSearchBar,
-                text: $viewModel.query,
-                prompt: viewModel.searchMode.searchPrompt
-            )
-            .onChange(of: viewModel.query) { _, _ in
-                guard viewModel.searchMode.usesTextSearchBar else { return }
-                viewModel.scheduleSearch()
-            }
-            .onSubmit {
-                guard viewModel.searchMode.usesTextSearchBar else { return }
-                Task { await viewModel.search() }
-            }
-                .navigationTitle("Search & Audio")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            showAudioSheet = true
-                        } label: {
-                            Image(systemName: "headphones")
-                        }
-                        .accessibilityLabel("Open audio player")
-                    }
-                }
-                .navigationDestination(for: SurahReadListenDestination.self) { destination in
-                    SurahReadListenView(
-                        destination: destination,
-                        container: container,
-                        audioViewModel: viewModel
+            Group {
+                if viewModel.surahs.isEmpty {
+                    ProgressView("Loading surahs...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    AyahReferencePickerView(
+                        surahs: viewModel.surahs,
+                        appSettings: appSettings,
+                        recentListens: viewModel.recentListens,
+                        onReadAndListen: openReadAndListen
                     )
                 }
-                .safeAreaInset(edge: .bottom, spacing: 0) {
-                    if navigationPath.isEmpty && viewModel.showMiniPlayer {
-                        AudioMiniPlayerBar(viewModel: viewModel) {
-                            showAudioSheet = true
-                        }
+            }
+            .navigationTitle("Listen")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showAudioSheet = true
+                    } label: {
+                        Image(systemName: "headphones")
+                    }
+                    .accessibilityLabel("Open audio player")
+                }
+            }
+            .navigationDestination(for: SurahReadListenDestination.self) { destination in
+                SurahReadListenView(
+                    destination: destination,
+                    container: container,
+                    audioViewModel: viewModel,
+                    tracksReadingPosition: false
+                )
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if navigationPath.isEmpty && viewModel.showMiniPlayer {
+                    AudioMiniPlayerBar(viewModel: viewModel) {
+                        showAudioSheet = true
                     }
                 }
-                .sheet(isPresented: $showAudioSheet) {
-                    AudioPlayerSheet(
-                        viewModel: viewModel,
-                        showSurahPicker: $showSurahPicker
-                    )
-                }
-                .sheet(isPresented: $showSurahPicker) {
-                    SurahAudioPickerView(surahs: viewModel.surahs) { surah in
-                        viewModel.selectedSurahNumber = surah.number
-                        showSurahPicker = false
-                        showAudioSheet = false
-                        navigationPath.append(
-                            SurahReadListenDestination(
-                                surahNumber: surah.number,
-                                ayahNumber: 1,
-                                autoPlay: true
-                            )
+            }
+            .sheet(isPresented: $showAudioSheet) {
+                AudioPlayerSheet(
+                    viewModel: viewModel,
+                    showSurahPicker: $showSurahPicker
+                )
+            }
+            .sheet(isPresented: $showSurahPicker) {
+                SurahAudioPickerView(surahs: viewModel.surahs) { surah in
+                    viewModel.selectedSurahNumber = surah.number
+                    showSurahPicker = false
+                    showAudioSheet = false
+                    navigationPath.append(
+                        SurahReadListenDestination(
+                            surahNumber: surah.number,
+                            ayahNumber: 1,
+                            autoPlay: true
                         )
-                    }
-                }
-                .task {
-                    await viewModel.load()
-                }
-        }
-    }
-
-    @ViewBuilder
-    private var resultsSection: some View {
-        if viewModel.searchMode == .ayah {
-            AyahReferencePickerView(
-                surahs: viewModel.surahs,
-                appSettings: appSettings,
-                onReadAndListen: openReadAndListen
-            )
-        } else if viewModel.isSearching {
-            ProgressView("Searching...")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if let error = viewModel.searchErrorMessage {
-            ContentUnavailableView(
-                "Search failed",
-                systemImage: "exclamationmark.triangle",
-                description: Text(error)
-            )
-        } else if viewModel.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            ContentUnavailableView(
-                "Search the Quran",
-                systemImage: "text.magnifyingglass",
-                description: Text(viewModel.searchMode.emptyDescription)
-            )
-        } else if !viewModel.hasResults {
-            ContentUnavailableView(
-                noResultsTitle,
-                systemImage: "magnifyingglass",
-                description: Text(noResultsDescription)
-            )
-        } else {
-            List {
-                if !viewModel.matchingSurahs.isEmpty {
-                    Section {
-                        ForEach(viewModel.matchingSurahs) { surah in
-                            SurahSearchResultRow(
-                                surah: surah,
-                                arabicFont: appSettings.arabicFont
-                            ) {
-                                openReadAndListen(
-                                    surahNumber: surah.number,
-                                    ayahNumber: 1
-                                )
-                            }
-                        }
-                    } header: {
-                        Text("Surahs")
-                    } footer: {
-                        Text("Opens the surah text with recitation playing so you can read and listen together.")
-                    }
-                }
-
-                if !viewModel.ayahReferenceResults.isEmpty {
-                    Section {
-                        ForEach(viewModel.ayahReferenceResults) { result in
-                            AyahSearchResultRow(
-                                result: result,
-                                arabicFont: appSettings.arabicFont,
-                                urduFont: appSettings.urduFont
-                            ) {
-                                openReadAndListen(
-                                    surahNumber: result.surahNumber,
-                                    ayahNumber: result.ayahNumber
-                                )
-                            }
-                        }
-                    } header: {
-                        Text("Ayah")
-                    } footer: {
-                        Text("Use a custom reference like Yaseen:35, or numeric forms like 36:35 and 262.")
-                    }
-                }
-
-                if !viewModel.textSearchResults.isEmpty {
-                    Section("Ayah Text Matches") {
-                        ForEach(viewModel.textSearchResults) { result in
-                            Button {
-                                openReadAndListen(
-                                    surahNumber: result.surahNumber,
-                                    ayahNumber: result.ayahNumber
-                                )
-                            } label: {
-                                SearchResultRowView(
-                                    result: result,
-                                    arabicFont: appSettings.arabicFont,
-                                    urduFont: appSettings.urduFont
-                                )
-                            }
-                            .buttonStyle(.plain)
-                            .contentShape(Rectangle())
-                        }
-                    }
+                    )
                 }
             }
-            .listStyle(.insetGrouped)
-            .scrollDismissesKeyboard(.immediately)
+            .task {
+                await viewModel.load()
+            }
         }
     }
 
     private func openReadAndListen(surahNumber: Int, ayahNumber: Int) {
-        dismissSearch()
         navigationPath.append(
             SurahReadListenDestination(
                 surahNumber: surahNumber,
@@ -207,55 +86,18 @@ struct SearchAudioView: View {
             )
         )
     }
-
-    private var noResultsTitle: String {
-        switch viewModel.searchMode {
-        case .surah: "No surahs found"
-        case .ayah: "Ayah not found"
-        case .text: "No text matches"
-        }
-    }
-
-    private var noResultsDescription: String {
-        switch viewModel.searchMode {
-        case .surah:
-            "Try a different surah name or number."
-        case .ayah:
-            "Choose a different surah or ayah number."
-        case .text:
-            "Try a different Arabic or Urdu phrase."
-        }
-    }
-}
-
-private struct ConditionalSearchableModifier: ViewModifier {
-    let isEnabled: Bool
-    @Binding var text: String
-    let prompt: String
-
-    func body(content: Content) -> some View {
-        if isEnabled {
-            content.searchable(text: $text, prompt: Text(prompt))
-        } else {
-            content
-        }
-    }
-}
-
-private extension View {
-    func conditionalSearchable(isEnabled: Bool, text: Binding<String>, prompt: String) -> some View {
-        modifier(ConditionalSearchableModifier(isEnabled: isEnabled, text: text, prompt: prompt))
-    }
 }
 
 struct AyahReferencePickerView: View {
     let surahs: [Surah]
     let appSettings: AppSettings
+    let recentListens: [RecentListen]
     let onReadAndListen: (Int, Int) -> Void
 
     @State private var selectedSurahNumber = 1
     @State private var selectedAyahNumber = 1
     @State private var showSurahBrowser = false
+    @State private var showAyahPicker = false
 
     private var selectedSurah: Surah? {
         surahs.first { $0.number == selectedSurahNumber }
@@ -270,21 +112,22 @@ struct AyahReferencePickerView: View {
                 Form {
                     Section {
                         if let selectedSurah {
-                            Picker("Surah", selection: $selectedSurahNumber) {
-                                ForEach(surahs) { surah in
-                                    Text("\(surah.number) · \(surah.englishName)")
-                                        .tag(surah.number)
-                                }
+                            Button {
+                                showSurahBrowser = true
+                            } label: {
+                                selectionRow(
+                                    title: "Surah",
+                                    value: "\(selectedSurah.number) · \(selectedSurah.englishName)"
+                                )
                             }
-                            .onChange(of: selectedSurahNumber) { _, newValue in
-                                clampAyah(for: newValue)
-                            }
+                            .buttonStyle(.plain)
 
-                            Picker("Ayah", selection: $selectedAyahNumber) {
-                                ForEach(1...selectedSurah.numberOfAyahs, id: \.self) { ayah in
-                                    Text("\(ayah)").tag(ayah)
-                                }
+                            Button {
+                                showAyahPicker = true
+                            } label: {
+                                selectionRow(title: "Ayah", value: "\(selectedAyahNumber)")
                             }
+                            .buttonStyle(.plain)
                         }
                     } footer: {
                         if let selectedSurah {
@@ -292,12 +135,29 @@ struct AyahReferencePickerView: View {
                         }
                     }
 
-                    Section {
-                        Button {
-                            showSurahBrowser = true
-                        } label: {
-                            Label("Browse all surahs", systemImage: "list.bullet")
-                                .font(AppTheme.bodyFont(size: 18))
+                    if !recentListens.isEmpty {
+                        Section("Recent") {
+                            ForEach(recentListens) { item in
+                                Button {
+                                    onReadAndListen(item.surahNumber, item.ayahNumber)
+                                } label: {
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(item.surahName)
+                                                .font(AppTheme.bodyFont(size: 17))
+                                                .foregroundStyle(.primary)
+                                            Text("Ayah \(item.ayahNumber)")
+                                                .font(AppTheme.bodyFont(size: 13))
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+                                        Image(systemName: "play.circle.fill")
+                                            .foregroundStyle(AppTheme.accent)
+                                    }
+                                    .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
                     }
 
@@ -325,6 +185,14 @@ struct AyahReferencePickerView: View {
                         }
                     )
                 }
+                .sheet(isPresented: $showAyahPicker) {
+                    if let selectedSurah {
+                        AyahNumberPickerSheet(
+                            numberOfAyahs: selectedSurah.numberOfAyahs,
+                            selectedAyahNumber: $selectedAyahNumber
+                        )
+                    }
+                }
             }
         }
         .onAppear {
@@ -333,6 +201,23 @@ struct AyahReferencePickerView: View {
         .onChange(of: surahs) { _, _ in
             syncDefaultsIfNeeded()
         }
+    }
+
+    private func selectionRow(title: String, value: String) -> some View {
+        HStack {
+            Text(title)
+                .font(AppTheme.bodyFont(size: 17))
+                .foregroundStyle(.primary)
+            Spacer()
+            Text(value)
+                .font(AppTheme.bodyFont(size: 17))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.tertiary)
+        }
+        .contentShape(Rectangle())
     }
 
     private func clampAyah(for surahNumber: Int) {
@@ -399,6 +284,53 @@ struct AyahSurahBrowserSheet: View {
     }
 }
 
+struct AyahNumberPickerSheet: View {
+    let numberOfAyahs: Int
+    @Binding var selectedAyahNumber: Int
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var filter = ""
+
+    private var filteredAyahs: [Int] {
+        let trimmed = filter.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return Array(1...numberOfAyahs) }
+        return (1...numberOfAyahs).filter { String($0).hasPrefix(trimmed) }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List(filteredAyahs, id: \.self) { ayah in
+                Button {
+                    selectedAyahNumber = ayah
+                    dismiss()
+                } label: {
+                    HStack {
+                        Text("Ayah \(ayah)")
+                            .font(AppTheme.bodyFont(size: 17))
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        if ayah == selectedAyahNumber {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(AppTheme.accent)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+            .navigationTitle("Select Ayah")
+            .navigationBarTitleDisplayMode(.inline)
+            .searchable(text: $filter, prompt: "Find ayah number")
+            .keyboardType(.numberPad)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
 struct SurahPickerSelectionRow: View {
     let surah: Surah
     var arabicFont: ArabicFontChoice = .amiriQuran
@@ -433,84 +365,6 @@ struct SurahPickerSelectionRow: View {
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
-    }
-}
-
-struct SurahSearchResultRow: View {
-    let surah: Surah
-    var arabicFont: ArabicFontChoice = .amiriQuran
-    let onReadAndListen: () -> Void
-
-    var body: some View {
-        Button(action: onReadAndListen) {
-            VStack(alignment: .leading, spacing: 12) {
-                SurahRowView(surah: surah, arabicFont: arabicFont)
-
-                readAndListenLabel
-            }
-            .padding(.vertical, 4)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var readAndListenLabel: some View {
-        Label("Read & Listen", systemImage: "book.and.waveform.fill")
-            .font(AppTheme.bodyFont(size: 18))
-            .frame(maxWidth: .infinity, minHeight: 44)
-            .background(AppTheme.accent)
-            .foregroundStyle(.white)
-            .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius))
-    }
-}
-
-struct AyahSearchResultRow: View {
-    let result: SearchResult
-    var arabicFont: ArabicFontChoice = .amiriQuran
-    var urduFont: UrduFontChoice = .notoNastaliq
-    let onReadAndListen: () -> Void
-
-    var body: some View {
-        Button(action: onReadAndListen) {
-            VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text(result.displayReference)
-                            .font(AppTheme.titleFont(size: 22))
-                        Text(result.surahName)
-                            .font(AppTheme.bodyFont(size: 18))
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        if let absoluteAyahNumber = result.absoluteAyahNumber {
-                            Text("#\(absoluteAyahNumber)")
-                                .font(AppTheme.bodyFont(size: 14))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-
-                    Text(result.arabicText)
-                        .font(AppTheme.arabicFont(size: 22, choice: arabicFont))
-                        .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-
-                    if !result.urduText.isEmpty {
-                        Text(result.urduText)
-                            .font(AppTheme.urduFont(size: 18, choice: urduFont))
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Label("Read & Listen", systemImage: "book.and.waveform.fill")
-                    .font(AppTheme.bodyFont(size: 18))
-                    .frame(maxWidth: .infinity, minHeight: 44)
-                    .background(AppTheme.accent)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius))
-            }
-            .padding(.vertical, 4)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
     }
 }
 
@@ -715,37 +569,5 @@ struct SurahAudioPickerView: View {
                 }
             }
         }
-    }
-}
-
-struct SearchResultRowView: View {
-    let result: SearchResult
-    var arabicFont: ArabicFontChoice = .amiriQuran
-    var urduFont: UrduFontChoice = .notoNastaliq
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("\(result.surahName) \(result.surahNumber):\(result.ayahNumber)")
-                    .font(AppTheme.titleFont(size: 20))
-                Spacer()
-                Image(systemName: "book.and.waveform.fill")
-                    .foregroundStyle(AppTheme.accent)
-            }
-
-            Text(result.arabicText)
-                .font(AppTheme.arabicFont(size: 20, choice: arabicFont))
-                .lineLimit(2)
-                .multilineTextAlignment(.trailing)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-
-            if !result.urduText.isEmpty {
-                Text(result.urduText)
-                    .font(AppTheme.urduFont(size: 18, choice: urduFont))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
-            }
-        }
-        .padding(.vertical, 8)
     }
 }

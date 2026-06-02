@@ -80,6 +80,11 @@ protocol SettingsRepositoryProtocol: Sendable {
     func saveSettings(_ settings: AppSettings) async
 }
 
+protocol RecentListenRepositoryProtocol: Sendable {
+    func fetchRecent() async -> [RecentListen]
+    func record(surahNumber: Int, surahName: String, ayahNumber: Int) async -> [RecentListen]
+}
+
 protocol APIClientProtocol: Sendable {
     func fetchArabicQuran() async throws -> QuranEditionResponse
     func fetchUrduTranslation() async throws -> QuranEditionResponse
