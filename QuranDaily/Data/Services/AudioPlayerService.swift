@@ -5,6 +5,7 @@ import Foundation
 final class AudioPlayerService: NSObject, AudioPlayerProtocol {
     private var player: AVPlayer?
     private var endObserver: NSObjectProtocol?
+    private var timeObserver: Any?
     private(set) var currentSurahNumber: Int?
     private(set) var currentAyahInSurah: Int?
     private var ayahSequenceEnd: Int?
@@ -141,14 +142,36 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
         let avPlayer = AVPlayer(playerItem: item)
         player = avPlayer
         observeEnd(of: item)
+        addPeriodicTimeObserver(to: avPlayer)
         avPlayer.play()
         notifyPlaybackUpdate()
     }
 
     private func teardownPlayer() {
         player?.pause()
+        removeTimeObserver()
         player = nil
         removeEndObserver()
+    }
+
+    private func addPeriodicTimeObserver(to player: AVPlayer) {
+        removeTimeObserver()
+        // Frequent updates so the mini-player reflects the new item's duration and
+        // position as soon as an ayah transition starts, instead of waiting on the
+        // slower drift-sync timer.
+        let interval = CMTime(seconds: 0.3, preferredTimescale: 600)
+        timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] _ in
+            Task { @MainActor in
+                self?.notifyPlaybackUpdate()
+            }
+        }
+    }
+
+    private func removeTimeObserver() {
+        if let timeObserver {
+            player?.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
+        }
     }
 
     private func observeEnd(of item: AVPlayerItem) {
@@ -188,6 +211,7 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
 
     private func finishCurrentSurahPlayback() {
         player?.pause()
+        removeTimeObserver()
         player = nil
         removeEndObserver()
         notifyPlaybackUpdate()

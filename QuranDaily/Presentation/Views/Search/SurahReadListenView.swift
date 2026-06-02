@@ -10,6 +10,7 @@ struct SurahReadListenView: View {
     let destination: SurahReadListenDestination
     let container: AppContainer
     var audioViewModel: SearchAudioViewModel
+    var tracksReadingPosition = true
 
     @State private var detailViewModel: SurahDetailViewModel?
     @State private var errorMessage: String?
@@ -20,8 +21,10 @@ struct SurahReadListenView: View {
         surahContent
             .background(AppTheme.background)
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                AudioMiniPlayerBar(viewModel: audioViewModel) {
-                    showAudioSheet = true
+                if audioViewModel.showMiniPlayer {
+                    AudioMiniPlayerBar(viewModel: audioViewModel) {
+                        showAudioSheet = true
+                    }
                 }
             }
             .toolbar {
@@ -59,7 +62,8 @@ struct SurahReadListenView: View {
                             fromAyah: ayahNumber
                         )
                     }
-                }
+                },
+                tracksReadingPosition: tracksReadingPosition
             )
         } else if let errorMessage {
             ContentUnavailableView(
@@ -93,10 +97,11 @@ struct SurahReadListenView: View {
             audioViewModel.selectedSurahNumber = destination.surahNumber
 
             if destination.autoPlay {
-                let startAyah = destination.ayahNumber > 1 ? destination.ayahNumber : nil
+                // Always start ayah-by-ayah (including ayah 1) so the recitation
+                // tracks `currentAyahInSurah` and the matching ayah highlights.
                 await audioViewModel.playSurah(
                     surah.number,
-                    fromAyah: startAyah
+                    fromAyah: destination.ayahNumber
                 )
             }
         } catch {

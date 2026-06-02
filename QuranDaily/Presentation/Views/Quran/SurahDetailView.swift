@@ -4,6 +4,7 @@ struct SurahDetailView: View {
     @Bindable var viewModel: SurahDetailViewModel
     var highlightedAyahInSurah: Int?
     var onAyahTap: ((Int) -> Void)?
+    var tracksReadingPosition = true
     @State private var visibleAyah: Int = 1
     @State private var didScrollToInitialAyah = false
 
@@ -49,6 +50,7 @@ struct SurahDetailView: View {
                         scrollToAyah(ayahNumber, using: proxy, animated: true)
                     }
                     .onDisappear {
+                        guard tracksReadingPosition else { return }
                         Task {
                             await viewModel.saveReadingPosition(ayahNumber: visibleAyah)
                         }
