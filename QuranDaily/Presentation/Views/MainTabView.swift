@@ -5,6 +5,7 @@ struct MainTabView: View {
 
     @State private var quranViewModel: QuranViewModel
     @State private var searchViewModel: SearchAudioViewModel
+    @State private var bookmarksViewModel: BookmarksViewModel
     @State private var settingsViewModel: SettingsViewModel
     @State private var appSettings: AppSettings = .default
 
@@ -18,7 +19,11 @@ struct MainTabView: View {
             searchQuranUseCase: container.searchQuranUseCase,
             fetchQuranUseCase: container.fetchQuranUseCase,
             audioRepository: container.audioRepository,
-            audioPlayer: container.audioPlayer
+            audioPlayer: container.audioPlayer,
+            recentListenRepository: container.recentListenRepository
+        ))
+        _bookmarksViewModel = State(initialValue: BookmarksViewModel(
+            bookmarkRepository: container.bookmarkRepository
         ))
         _settingsViewModel = State(initialValue: SettingsViewModel(
             settingsRepository: container.settingsRepository,
@@ -33,10 +38,11 @@ struct MainTabView: View {
             SurahListView(
                 viewModel: quranViewModel,
                 container: container,
-                appSettings: appSettings
+                appSettings: appSettings,
+                audioViewModel: searchViewModel
             )
             .tabItem {
-                Label("Quran", systemImage: "book.fill")
+                Label("Read", systemImage: "book.fill")
             }
 
             SearchAudioView(
@@ -45,7 +51,17 @@ struct MainTabView: View {
                 appSettings: appSettings
             )
                 .tabItem {
-                    Label("Search & Audio", systemImage: "magnifyingglass")
+                    Label("Listen", systemImage: "headphones")
+                }
+
+            BookmarksView(
+                viewModel: bookmarksViewModel,
+                container: container,
+                appSettings: appSettings,
+                audioViewModel: searchViewModel
+            )
+                .tabItem {
+                    Label("Bookmarks", systemImage: "bookmark.fill")
                 }
 
             SettingsView(viewModel: settingsViewModel, appSettings: $appSettings)
