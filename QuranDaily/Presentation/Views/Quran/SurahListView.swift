@@ -109,12 +109,33 @@ struct SurahListView: View {
             }
             .onChange(of: path) { _, newPath in
                 if newPath.isEmpty {
-                    Task { await viewModel.refreshReadingPosition() }
+                    Task {
+                        await viewModel.refreshReadingPosition()
+                        syncReadingPositionWithPlayback()
+                    }
                 }
+            }
+            .onChange(of: audioViewModel.currentAyahInSurah) { _, _ in
+                syncReadingPositionWithPlayback()
             }
             .task {
                 await viewModel.load()
             }
+        }
+    }
+
+    private func syncReadingPositionWithPlayback() {
+        // While back on the list with audio still playing the surah we're tracking,
+        // keep the Continue Reading card advancing with the recitation.
+        guard path.isEmpty,
+              audioViewModel.isPlaying,
+              let surah = audioViewModel.currentSurahNumber,
+              let ayah = audioViewModel.currentAyahInSurah,
+              surah == viewModel.readingPosition.surahNumber
+        else { return }
+
+        Task {
+            await viewModel.updateReadingPosition(surahNumber: surah, ayahNumber: ayah)
         }
     }
 

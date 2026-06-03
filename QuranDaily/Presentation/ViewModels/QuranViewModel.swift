@@ -38,4 +38,14 @@ final class QuranViewModel {
     func refreshReadingPosition() async {
         readingPosition = await readingPositionRepository.fetchPosition()
     }
+
+    func updateReadingPosition(surahNumber: Int, ayahNumber: Int) async {
+        let position = ReadingPosition(
+            surahNumber: surahNumber,
+            ayahNumber: ayahNumber,
+            scrollAnchor: "ayah-\(ayahNumber)"
+        )
+        readingPosition = position
+        await readingPositionRepository.savePosition(position)
+    }
 }
