@@ -140,7 +140,7 @@ struct SurahListView: View {
     }
 
     private var resumeSurah: Surah? {
-        guard viewModel.readingPosition.surahNumber > 0 else { return nil }
+        guard viewModel.readingPosition.hasSavedPosition else { return nil }
         return viewModel.surahs.first { $0.number == viewModel.readingPosition.surahNumber }
     }
 

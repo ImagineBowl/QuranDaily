@@ -21,5 +21,8 @@ struct ReadingPosition: Codable, Hashable, Sendable {
     let ayahNumber: Int
     let scrollAnchor: String?
 
-    static let `default` = ReadingPosition(surahNumber: 1, ayahNumber: 1, scrollAnchor: nil)
+    /// No saved reading history yet (first launch or never opened the reader).
+    static let `default` = ReadingPosition(surahNumber: 0, ayahNumber: 0, scrollAnchor: nil)
+
+    var hasSavedPosition: Bool { surahNumber > 0 }
 }
