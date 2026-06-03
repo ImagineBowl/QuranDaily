@@ -197,6 +197,10 @@ struct AyahReferencePickerView: View {
         .onChange(of: surahs) { _, _ in
             syncDefaultsIfNeeded()
         }
+        .onChange(of: selectedSurahNumber) { _, _ in
+            // Changing the surah should start the ayah selection over.
+            selectedAyahNumber = 1
+        }
     }
 
     private func selectionRow(title: String, value: String) -> some View {
