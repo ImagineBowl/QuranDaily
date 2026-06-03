@@ -1,3 +1,10 @@
+//
+//  TipJarService.swift
+//  QuranDaily
+//
+//  Created by Ahsan Minhas on 30/05/2026.
+//
+
 import StoreKit
 
 protocol TipJarServiceProtocol: Sendable {

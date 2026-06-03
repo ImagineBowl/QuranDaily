@@ -1,3 +1,10 @@
+//
+//  TestFixtures.swift
+//  QuranDailyTests
+//
+//  Created by Ahsan Minhas on 30/05/2026.
+//
+
 import Foundation
 import StoreKit
 #if SWIFT_PACKAGE

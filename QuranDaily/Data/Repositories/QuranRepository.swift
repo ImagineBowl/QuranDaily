@@ -1,3 +1,10 @@
+//
+//  QuranRepository.swift
+//  QuranDaily
+//
+//  Created by Ahsan Minhas on 30/05/2026.
+//
+
 import Foundation
 
 final class QuranRepository: QuranRepositoryProtocol, @unchecked Sendable {

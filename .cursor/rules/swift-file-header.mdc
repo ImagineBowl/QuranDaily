@@ -1,0 +1,27 @@
+---
+description: Require Xcode-style file headers on every Swift source file
+globs: **/*.swift
+alwaysApply: false
+---
+
+# Swift file header
+
+Every **new** `.swift` file must start with this block (before any `import`). Do not add headers to `Package.swift` or generated build artifacts under `.build/`.
+
+```swift
+//
+//  FileName.swift
+//  <TargetName>
+//
+//  Created by Ahsan Minhas on DD/MM/YYYY.
+//
+
+```
+
+## Rules
+
+- `FileName.swift` must match the actual file name exactly.
+- `<TargetName>`: `QuranDaily` for app sources, `QuranDailyTests` for unit tests, `QuranDailyUITests` for UI tests.
+- Use **today's date** (DD/MM/YYYY) when creating a new file; do not change the date when editing an existing file.
+- One blank line after the closing `//` before the first `import` or code.
+- When editing an existing file that already has a header, leave it unchanged.

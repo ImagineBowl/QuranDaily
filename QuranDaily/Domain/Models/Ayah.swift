@@ -1,3 +1,10 @@
+//
+//  Ayah.swift
+//  QuranDaily
+//
+//  Created by Ahsan Minhas on 30/05/2026.
+//
+
 import Foundation
 
 struct Ayah: Codable, Identifiable, Hashable, Sendable {

@@ -1,3 +1,10 @@
+//
+//  ViewModelTests.swift
+//  QuranDailyTests
+//
+//  Created by Ahsan Minhas on 30/05/2026.
+//
+
 import XCTest
 @testable import QuranDaily
 
