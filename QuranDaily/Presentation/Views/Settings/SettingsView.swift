@@ -146,13 +146,21 @@ struct SettingsView: View {
 
                 Section("App Info") {
                     LabeledContent("App") {
-                        Text("QuranDaily")
+                        Text(AppInfo.displayName)
                     }
                     LabeledContent("Version") {
-                        Text("1.0.0")
+                        Text(AppInfo.versionDisplay)
                     }
                     LabeledContent("Data Source") {
                         Text("AlQuran Cloud")
+                    }
+
+                    Link(destination: AppInfo.privacyPolicyURL) {
+                        Label("Privacy Policy", systemImage: "hand.raised")
+                    }
+
+                    Link(destination: AppInfo.supportURL) {
+                        Label("Contact Support", systemImage: "envelope")
                     }
                 }
 
