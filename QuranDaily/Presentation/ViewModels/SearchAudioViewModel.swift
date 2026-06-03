@@ -22,6 +22,7 @@ final class SearchAudioViewModel {
     var audioErrorMessage: String?
     var currentSurahNumber: Int?
     var currentAyahInSurah: Int?
+    var currentAyahArabicPreview: String?
     var isPlaying = false
     var currentTime: TimeInterval = 0
     var duration: TimeInterval = 0
@@ -29,6 +30,8 @@ final class SearchAudioViewModel {
 
     private var progressTimer: Timer?
     private var searchTask: Task<Void, Never>?
+    private var ayahPreviewTask: Task<Void, Never>?
+    private var lastAyahPreviewKey: String?
 
     init(
         searchQuranUseCase: SearchQuranUseCase,
@@ -89,6 +92,16 @@ final class SearchAudioViewModel {
     var currentSurahDisplayName: String {
         let number = currentSurahNumber ?? selectedSurahNumber
         return surahs.first { $0.number == number }?.englishName ?? "Surah \(number)"
+    }
+
+    var currentAyahDisplayLine: String {
+        if let preview = currentAyahArabicPreview, !preview.isEmpty {
+            return preview
+        }
+        if let ayah = currentAyahInSurah {
+            return "Ayah \(ayah)"
+        }
+        return playbackStatusLabel
     }
 
     var playbackTrackID: String {
@@ -208,7 +221,11 @@ final class SearchAudioViewModel {
         }
     }
 
-    func playSurah(_ surahNumber: Int, fromAyah: Int? = nil) async {
+    func playSurah(
+        _ surahNumber: Int,
+        fromAyah: Int? = nil,
+        recordRecentListen: Bool = false
+    ) async {
         isLoadingAudio = true
         audioErrorMessage = nil
         selectedSurahNumber = surahNumber
@@ -227,12 +244,14 @@ final class SearchAudioViewModel {
             }
             startProgressTimer()
             syncPlaybackState()
-            let name = surahs.first { $0.number == surahNumber }?.englishName ?? "Surah \(surahNumber)"
-            recentListens = await recentListenRepository.record(
-                surahNumber: surahNumber,
-                surahName: name,
-                ayahNumber: fromAyah ?? 1
-            )
+            if recordRecentListen {
+                let name = surahs.first { $0.number == surahNumber }?.englishName ?? "Surah \(surahNumber)"
+                recentListens = await recentListenRepository.record(
+                    surahNumber: surahNumber,
+                    surahName: name,
+                    ayahNumber: fromAyah ?? 1
+                )
+            }
         } catch {
             audioErrorMessage = error.localizedDescription
             syncPlaybackState()
@@ -292,6 +311,41 @@ final class SearchAudioViewModel {
         if let currentSurahNumber {
             selectedSurahNumber = currentSurahNumber
         }
+
+        refreshCurrentAyahPreview()
+    }
+
+    private func refreshCurrentAyahPreview() {
+        guard let surahNumber = currentSurahNumber,
+              let ayahNumber = currentAyahInSurah else {
+            currentAyahArabicPreview = nil
+            lastAyahPreviewKey = nil
+            ayahPreviewTask?.cancel()
+            return
+        }
+
+        let key = "\(surahNumber)-\(ayahNumber)"
+        guard key != lastAyahPreviewKey else { return }
+        lastAyahPreviewKey = key
+        ayahPreviewTask?.cancel()
+        ayahPreviewTask = Task {
+            do {
+                let ayah = try await fetchQuranUseCase.executeAyah(
+                    surahNumber: surahNumber,
+                    ayahInSurah: ayahNumber
+                )
+                guard !Task.isCancelled else { return }
+                currentAyahArabicPreview = ayah.map { Self.truncatedAyahPreview($0.arabicText) }
+            } catch {
+                currentAyahArabicPreview = nil
+            }
+        }
+    }
+
+    private static func truncatedAyahPreview(_ text: String, maxLength: Int = 72) -> String {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.count > maxLength else { return trimmed }
+        return String(trimmed.prefix(maxLength)) + "…"
     }
 
     private func startProgressTimer() {
