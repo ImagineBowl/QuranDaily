@@ -128,6 +128,16 @@ struct AyahReferencePickerView: View {
                                 selectionRow(title: "Ayah", value: "\(selectedAyahNumber)")
                             }
                             .buttonStyle(.plain)
+
+                            Button {
+                                onReadAndListen(selectedSurahNumber, selectedAyahNumber)
+                            } label: {
+                                Label("Read & Listen", systemImage: "book.and.waveform.fill")
+                                    .font(AppTheme.bodyFont(size: 18))
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(LargeButtonStyle())
+                            .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 12, trailing: 16))
                         }
                     } footer: {
                         if let selectedSurah {
@@ -160,27 +170,13 @@ struct AyahReferencePickerView: View {
                             }
                         }
                     }
-
-                    Section {
-                        Button {
-                            onReadAndListen(selectedSurahNumber, selectedAyahNumber)
-                        } label: {
-                            Label("Read & Listen", systemImage: "book.and.waveform.fill")
-                                .font(AppTheme.bodyFont(size: 18))
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(LargeButtonStyle())
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
-                    }
                 }
                 .sheet(isPresented: $showSurahBrowser) {
                     AyahSurahBrowserSheet(
                         surahs: surahs,
                         appSettings: appSettings,
                         selectedSurahNumber: $selectedSurahNumber,
-                        onSelect: { surahNumber in
-                            clampAyah(for: surahNumber)
+                        onSelect: { _ in
                             showSurahBrowser = false
                         }
                     )
