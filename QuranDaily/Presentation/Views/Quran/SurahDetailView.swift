@@ -14,6 +14,17 @@ struct SurahDetailView: View {
         visibleAyahs.min()
     }
 
+    private var trackedAyah: Int? {
+        // While reciting this surah, the reading position should follow the ayah
+        // being played (centered on screen) rather than the top-visible ayah,
+        // which sits a couple ayahs above it. Falls back to scroll tracking when
+        // not playing.
+        if isAudioPlaying, let playing = highlightedAyahInSurah {
+            return playing
+        }
+        return topVisibleAyah
+    }
+
     private var showJumpToPlaying: Bool {
         guard isAudioPlaying, let target = highlightedAyahInSurah else { return false }
         return !visibleAyahs.contains(target)
@@ -65,6 +76,8 @@ struct SurahDetailView: View {
                     }
                     .onChange(of: highlightedAyahInSurah) { _, ayahNumber in
                         guard let ayahNumber else { return }
+                        // Persist the newly playing ayah as the reading position.
+                        scheduleReadingPositionSave()
                         // Only auto-follow while the user is still viewing the playing
                         // ayah. Once they scroll away it stays put and the jump button
                         // appears, so we don't yank them back mid-read.
@@ -76,7 +89,7 @@ struct SurahDetailView: View {
                     }
                     .onDisappear {
                         saveTask?.cancel()
-                        guard tracksReadingPosition, let ayah = topVisibleAyah else { return }
+                        guard tracksReadingPosition, let ayah = trackedAyah else { return }
                         Task {
                             await viewModel.saveReadingPosition(ayahNumber: ayah)
                         }
@@ -120,11 +133,11 @@ struct SurahDetailView: View {
     }
 
     private func scheduleReadingPositionSave() {
-        guard tracksReadingPosition, let ayah = topVisibleAyah else { return }
+        guard tracksReadingPosition, let ayah = trackedAyah else { return }
         saveTask?.cancel()
         saveTask = Task {
             // Debounce so rapid scrolling (and the initial programmatic scroll)
-            // only persists the settled top-visible ayah.
+            // only persists the settled ayah.
             try? await Task.sleep(for: .milliseconds(500))
             guard !Task.isCancelled else { return }
             await viewModel.saveReadingPosition(ayahNumber: ayah)
