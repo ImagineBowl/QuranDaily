@@ -37,6 +37,10 @@ App/           Dependency injection (AppContainer)
 - Xcode 26+
 - iOS 26.4+
 
+## Contributing
+
+Even for solo work, use **branches and pull requests** instead of pushing straight to `main`. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Getting Started
 
 1. Clone the repository
