@@ -15,6 +15,10 @@ struct FetchQuranUseCase: Sendable {
         try await quranRepository.fetchAyahs(forSurah: surahNumber)
     }
 
+    func executeAyah(surahNumber: Int, ayahInSurah: Int) async throws -> Ayah? {
+        try await quranRepository.fetchAyah(surahNumber: surahNumber, ayahInSurah: ayahInSurah)
+    }
+
     func executeJuzList() async throws -> [Juz] {
         try await quranRepository.fetchJuzList()
     }

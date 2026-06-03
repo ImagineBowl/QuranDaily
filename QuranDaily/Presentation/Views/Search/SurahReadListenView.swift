@@ -11,6 +11,8 @@ struct SurahReadListenView: View {
     let container: AppContainer
     var audioViewModel: SearchAudioViewModel
     var tracksReadingPosition = true
+    /// When true, playback is attributed to the Listen tab's Recent section.
+    var tracksRecentListens = false
 
     @State private var detailViewModel: SurahDetailViewModel?
     @State private var errorMessage: String?
@@ -63,7 +65,8 @@ struct SurahReadListenView: View {
                     Task {
                         await audioViewModel.playSurah(
                             destination.surahNumber,
-                            fromAyah: ayahNumber
+                            fromAyah: ayahNumber,
+                            recordRecentListen: tracksRecentListens
                         )
                     }
                 },
@@ -105,7 +108,8 @@ struct SurahReadListenView: View {
                 // tracks `currentAyahInSurah` and the matching ayah highlights.
                 await audioViewModel.playSurah(
                     surah.number,
-                    fromAyah: destination.ayahNumber
+                    fromAyah: destination.ayahNumber,
+                    recordRecentListen: tracksRecentListens
                 )
             }
         } catch {
@@ -122,7 +126,8 @@ struct SurahReadListenView: View {
             // resumed ayah highlights and audio plays from there.
             await audioViewModel.playSurah(
                 destination.surahNumber,
-                fromAyah: destination.ayahNumber
+                fromAyah: destination.ayahNumber,
+                recordRecentListen: tracksRecentListens
             )
         }
     }
@@ -169,72 +174,94 @@ struct AudioMiniPlayerBar: View {
                     trackID: viewModel.playbackTrackID
                 )
                 .padding(.horizontal)
+                .padding(.top, 8)
+                .contentShape(Rectangle())
+                .onTapGesture(perform: onExpand)
+                .accessibilityAddTraits(.isButton)
+                .accessibilityLabel("Expand player")
             }
 
             Divider()
 
-            HStack(spacing: 20) {
-                Button(action: onExpand) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        if viewModel.isLoadingAudio {
-                            Text("Loading audio...")
-                                .font(AppTheme.bodyFont(size: 16))
-                        } else {
-                            Text("Surah \(viewModel.currentSurahNumber ?? viewModel.selectedSurahNumber)")
-                                .font(AppTheme.titleFont(size: 16))
-                            HStack(spacing: 6) {
-                                Text(viewModel.currentSurahDisplayName)
-                                Text("•")
-                                Text(viewModel.playbackStatusLabel)
-                            }
-                            .font(AppTheme.bodyFont(size: 14))
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
-                        }
-                    }
+            HStack(spacing: 12) {
+                miniPlayerLabels
                     .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .buttonStyle(.plain)
+                    .contentShape(Rectangle())
+                    .onTapGesture(perform: onExpand)
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityLabel("Expand player")
+                    .accessibilityHint("Opens the full Now Playing screen")
 
-                Button {
-                    Task { await viewModel.playPrevious() }
-                } label: {
-                    Image(systemName: "backward.fill")
-                        .font(.title3)
-                        .frame(width: 44, height: 44)
-                }
-                .buttonStyle(.plain)
-                .disabled(viewModel.isLoadingAudio)
-
-                Button {
-                    Task { await viewModel.togglePlayback() }
-                } label: {
-                    Group {
-                        if viewModel.isLoadingAudio {
-                            ProgressView()
-                        } else {
-                            Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
-                                .font(.title2)
-                        }
-                    }
-                    .frame(width: 44, height: 44)
-                }
-                .buttonStyle(.plain)
-                .disabled(viewModel.isLoadingAudio)
-
-                Button {
-                    Task { await viewModel.playNext() }
-                } label: {
-                    Image(systemName: "forward.fill")
-                        .font(.title3)
-                        .frame(width: 44, height: 44)
-                }
-                .buttonStyle(.plain)
-                .disabled(viewModel.isLoadingAudio)
+                miniPlayerTransportControls
             }
             .padding(.horizontal)
             .padding(.vertical, 10)
             .background(.bar)
+        }
+    }
+
+    private var miniPlayerLabels: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            if viewModel.isLoadingAudio {
+                Text("Loading audio...")
+                    .font(AppTheme.bodyFont(size: 16))
+            } else {
+                Text(viewModel.currentSurahDisplayName)
+                    .font(AppTheme.titleFont(size: 16))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                Text(viewModel.currentAyahDisplayLine)
+                    .font(AppTheme.bodyFont(size: 14))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+        }
+    }
+
+    private var miniPlayerTransportControls: some View {
+        HStack(spacing: 4) {
+            Button {
+                Task { await viewModel.playPrevious() }
+            } label: {
+                Image(systemName: "backward.fill")
+                    .font(.title3)
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.isLoadingAudio)
+            .accessibilityLabel("Previous ayah")
+
+            Button {
+                Task { await viewModel.togglePlayback() }
+            } label: {
+                Group {
+                    if viewModel.isLoadingAudio {
+                        ProgressView()
+                            .tint(AppTheme.accent)
+                    } else {
+                        Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
+                            .font(.title2)
+                            .foregroundStyle(AppTheme.accent)
+                    }
+                }
+                .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.isLoadingAudio)
+            .accessibilityLabel(viewModel.isPlaying ? "Pause" : "Play")
+
+            Button {
+                Task { await viewModel.playNext() }
+            } label: {
+                Image(systemName: "forward.fill")
+                    .font(.title3)
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: 44, height: 44)
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.isLoadingAudio)
+            .accessibilityLabel("Next ayah")
         }
     }
 }

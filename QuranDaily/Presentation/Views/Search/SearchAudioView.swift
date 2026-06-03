@@ -41,7 +41,8 @@ struct SearchAudioView: View {
                     destination: destination,
                     container: container,
                     audioViewModel: viewModel,
-                    tracksReadingPosition: false
+                    tracksReadingPosition: false,
+                    tracksRecentListens: true
                 )
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -374,116 +375,182 @@ struct AudioPlayerSheet: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    surahSelectionCard
-                    actionButtons
-                    statusSection
-                    playbackControls
-                }
-                .padding()
-            }
-            .background(AppTheme.background)
-            .navigationTitle("Audio Recitation")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") { dismiss() }
-                }
-            }
-        }
-        .presentationDetents([.medium, .large])
+    private var displayedSurah: Surah? {
+        let number = viewModel.currentSurahNumber ?? viewModel.selectedSurahNumber
+        return viewModel.surahs.first { $0.number == number }
     }
 
-    private var surahSelectionCard: some View {
+    var body: some View {
+        VStack(spacing: 0) {
+            nowPlayingHeader
+
+            Spacer(minLength: 12)
+
+            artworkView
+                .padding(.horizontal, 28)
+
+            Spacer(minLength: 12)
+
+            VStack(spacing: 24) {
+                trackInfo
+                scrubber
+                transportControls
+                secondaryControls
+            }
+            .padding(.horizontal, 28)
+
+            Spacer(minLength: 20)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(backgroundGradient)
+        .tint(AppTheme.accent)
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
+    }
+
+    private var backgroundGradient: some View {
+        LinearGradient(
+            colors: [AppTheme.accent.opacity(0.28), AppTheme.background],
+            startPoint: .top,
+            endPoint: .center
+        )
+        .ignoresSafeArea()
+    }
+
+    private var nowPlayingHeader: some View {
+        ZStack {
+            Text("Now Playing")
+                .font(.system(size: 13, weight: .semibold))
+                .textCase(.uppercase)
+                .foregroundStyle(.secondary)
+
+            HStack {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(AppTheme.accent)
+                        .frame(width: AppTheme.minimumTapSize, height: AppTheme.minimumTapSize)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Close player")
+
+                Spacer()
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.top, 8)
+    }
+
+    private var artworkView: some View {
         Button {
             showSurahPicker = true
         } label: {
-            HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Surah \(viewModel.selectedSurahNumber)")
-                        .font(AppTheme.titleFont(size: 24))
-                    Text(viewModel.selectedSurahName)
-                        .font(AppTheme.bodyFont(size: 18))
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                if viewModel.isSelectedSurahDownloaded {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(AppTheme.accent)
-                        .font(.title2)
-                }
-
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.secondary)
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(AppTheme.secondaryBackground)
-            .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius))
-        }
-        .buttonStyle(.plain)
-    }
-
-    private var actionButtons: some View {
-        VStack(spacing: 12) {
-            Text(viewModel.isSelectedSurahDownloaded
-                 ? "Playing from downloaded audio."
-                 : "Streaming online. Download to listen offline.")
-                .font(AppTheme.bodyFont(size: 16))
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            HStack(spacing: 12) {
-                Button {
-                    Task { await viewModel.playSelectedSurah() }
-                } label: {
-                    Label("Play", systemImage: "play.fill")
-                }
-                .buttonStyle(LargeButtonStyle())
-                .disabled(viewModel.isLoadingAudio || viewModel.isDownloadingAudio)
-
-                Button {
-                    Task { await viewModel.downloadSelectedSurah() }
-                } label: {
-                    if viewModel.isDownloadingAudio {
-                        ProgressView()
-                            .frame(maxWidth: .infinity, minHeight: AppTheme.minimumTapSize)
-                    } else {
-                        Label(
-                            viewModel.isSelectedSurahDownloaded ? "Downloaded" : "Download",
-                            systemImage: viewModel.isSelectedSurahDownloaded ? "checkmark.circle.fill" : "arrow.down.circle"
+            ZStack {
+                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [AppTheme.accent, AppTheme.accent.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
                         )
+                    )
+                    .shadow(color: AppTheme.accent.opacity(0.35), radius: 24, y: 12)
+
+                VStack(spacing: 18) {
+                    Image(systemName: "book.and.waveform.fill")
+                        .font(.system(size: 30, weight: .regular))
+                        .foregroundStyle(.white.opacity(0.85))
+
+                    if let surah = displayedSurah {
+                        Text(surah.name)
+                            .font(AppTheme.arabicFont(size: 40))
+                            .foregroundStyle(.white)
+                            .multilineTextAlignment(.center)
+                            .minimumScaleFactor(0.5)
+                            .padding(.horizontal, 24)
+
+                        Text(surah.englishName)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.9))
+                    } else {
+                        Text(viewModel.currentSurahDisplayName)
+                            .font(AppTheme.titleFont(size: 28))
+                            .foregroundStyle(.white)
                     }
                 }
-                .buttonStyle(SecondaryButtonStyle())
-                .disabled(viewModel.isSelectedSurahDownloaded || viewModel.isDownloadingAudio)
+                .padding(28)
+
+                VStack {
+                    HStack {
+                        Spacer()
+                        Label("Change", systemImage: "chevron.up.chevron.down")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.9))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(.white.opacity(0.18), in: Capsule())
+                    }
+                    Spacer()
+                }
+                .padding(16)
             }
+            .aspectRatio(1, contentMode: .fit)
+            .frame(maxWidth: 360)
         }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Change surah")
+    }
+
+    private var trackInfo: some View {
+        VStack(spacing: 6) {
+            Text(displayedSurah?.englishName ?? viewModel.currentSurahDisplayName)
+                .font(AppTheme.titleFont(size: 26))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+
+            if let surah = displayedSurah {
+                Text(surah.englishNameTranslation)
+                    .font(AppTheme.bodyFont(size: 16))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+
+            if let ayahLine = currentAyahLine {
+                Text(ayahLine)
+                    .font(AppTheme.arabicFont(size: 22))
+                    .foregroundStyle(.primary)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(3)
+                    .padding(.top, 4)
+            }
+
+            Text(ayahPositionLabel)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(AppTheme.accent)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var currentAyahLine: String? {
+        if let preview = viewModel.currentAyahArabicPreview, !preview.isEmpty {
+            return preview
+        }
+        return nil
+    }
+
+    private var ayahPositionLabel: String {
+        if let ayah = viewModel.currentAyahInSurah, let surah = displayedSurah {
+            return "Ayah \(ayah) of \(surah.numberOfAyahs)"
+        }
+        return viewModel.playbackStatusLabel
     }
 
     @ViewBuilder
-    private var statusSection: some View {
-        if viewModel.isLoadingAudio {
-            ProgressView("Loading audio...")
-                .font(AppTheme.bodyFont(size: 18))
-        }
-
-        if let error = viewModel.audioErrorMessage {
-            Text(error)
-                .font(AppTheme.bodyFont(size: 18))
-                .foregroundStyle(.red)
-                .multilineTextAlignment(.center)
-        }
-    }
-
-    private var playbackControls: some View {
-        VStack(spacing: 12) {
-            if viewModel.duration > 0 {
+    private var scrubber: some View {
+        if viewModel.duration > 0 {
+            VStack(spacing: 4) {
                 SmoothPlaybackSlider(
                     currentTime: viewModel.currentTime,
                     duration: viewModel.duration,
@@ -502,40 +569,108 @@ struct AudioPlayerSheet: View {
                     Spacer()
                     Text(formatTime(viewModel.duration))
                 }
-                .font(AppTheme.bodyFont(size: 16))
+                .font(.system(size: 13, weight: .medium))
                 .foregroundStyle(.secondary)
             }
+        } else {
+            // Reserve space so controls don't jump once duration is known.
+            Color.clear.frame(height: 44)
+        }
+    }
 
-            HStack(spacing: 12) {
-                Button {
-                    Task { await viewModel.playPrevious() }
-                } label: {
-                    Image(systemName: "backward.fill")
-                        .frame(width: AppTheme.minimumTapSize, height: AppTheme.minimumTapSize)
+    private var transportControls: some View {
+        HStack(spacing: 44) {
+            Button {
+                Task { await viewModel.playPrevious() }
+            } label: {
+                Image(systemName: "backward.fill")
+                    .font(.system(size: 30))
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: AppTheme.minimumTapSize, height: AppTheme.minimumTapSize)
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.isLoadingAudio)
+            .accessibilityLabel("Previous ayah")
+
+            Button {
+                Task { await viewModel.togglePlayback() }
+            } label: {
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.accent)
+                        .frame(width: 76, height: 76)
+                        .shadow(color: AppTheme.accent.opacity(0.4), radius: 12, y: 6)
+
+                    if viewModel.isLoadingAudio {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
+                            .font(.system(size: 30, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
                 }
-                .buttonStyle(SecondaryButtonStyle())
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.isLoadingAudio)
+            .accessibilityLabel(viewModel.isPlaying ? "Pause" : "Play")
+
+            Button {
+                Task { await viewModel.playNext() }
+            } label: {
+                Image(systemName: "forward.fill")
+                    .font(.system(size: 30))
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: AppTheme.minimumTapSize, height: AppTheme.minimumTapSize)
+            }
+            .buttonStyle(.plain)
+            .disabled(viewModel.isLoadingAudio)
+            .accessibilityLabel("Next ayah")
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    @ViewBuilder
+    private var secondaryControls: some View {
+        VStack(spacing: 10) {
+            HStack(spacing: 10) {
+                Image(systemName: viewModel.isSelectedSurahDownloaded ? "arrow.down.circle.fill" : "dot.radiowaves.up.forward")
+                    .foregroundStyle(viewModel.isSelectedSurahDownloaded ? AppTheme.accent : .secondary)
+
+                Text(viewModel.isSelectedSurahDownloaded ? "Available offline" : "Streaming online")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.secondary)
+
+                Spacer()
 
                 Button {
-                    Task { await viewModel.togglePlayback() }
+                    Task { await viewModel.downloadSelectedSurah() }
                 } label: {
-                    Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
-                        .frame(width: AppTheme.minimumTapSize, height: AppTheme.minimumTapSize)
+                    if viewModel.isDownloadingAudio {
+                        ProgressView()
+                    } else {
+                        Label(
+                            viewModel.isSelectedSurahDownloaded ? "Downloaded" : "Download",
+                            systemImage: viewModel.isSelectedSurahDownloaded ? "checkmark.circle.fill" : "arrow.down.circle"
+                        )
+                        .font(.system(size: 14, weight: .semibold))
+                    }
                 }
-                .buttonStyle(LargeButtonStyle())
-                .disabled(viewModel.isLoadingAudio)
+                .tint(AppTheme.accent)
+                .disabled(viewModel.isSelectedSurahDownloaded || viewModel.isDownloadingAudio)
+                .accessibilityLabel(viewModel.isSelectedSurahDownloaded ? "Downloaded" : "Download for offline")
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(AppTheme.secondaryBackground, in: RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius))
 
-                Button {
-                    Task { await viewModel.playNext() }
-                } label: {
-                    Image(systemName: "forward.fill")
-                        .frame(width: AppTheme.minimumTapSize, height: AppTheme.minimumTapSize)
-                }
-                .buttonStyle(SecondaryButtonStyle())
+            if let error = viewModel.audioErrorMessage {
+                Text(error)
+                    .font(.system(size: 13))
+                    .foregroundStyle(.red)
+                    .multilineTextAlignment(.center)
             }
         }
-        .padding()
-        .background(AppTheme.secondaryBackground)
-        .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardCornerRadius))
     }
 
     private func formatTime(_ time: TimeInterval) -> String {
