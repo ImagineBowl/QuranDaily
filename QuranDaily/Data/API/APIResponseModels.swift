@@ -67,10 +67,36 @@ struct MetaJuzReference: Decodable, Sendable {
     let ayah: Int
 }
 
+struct IndopakQuranResponse: Decodable, Sendable {
+    let code: Int
+    let status: String
+    let data: IndopakQuranData
+}
+
+struct IndopakQuranData: Decodable, Sendable {
+    let ayahs: [IndopakAyah]
+}
+
+struct IndopakAyah: Decodable, Sendable {
+    let verseKey: String
+    let text: String
+
+    enum CodingKeys: String, CodingKey {
+        case verseKey = "verse_key"
+        case text
+    }
+}
+
 struct StoredQuranBundle: Codable, Sendable {
     let surahs: [Surah]
     let ayahsBySurah: [Int: [Ayah]]
     let juzs: [Juz]
+
+    var hasIndopakText: Bool {
+        ayahsBySurah.values
+            .flatMap { $0 }
+            .contains { !$0.arabicTextIndopak.isEmpty }
+    }
 }
 
 enum StoragePaths {

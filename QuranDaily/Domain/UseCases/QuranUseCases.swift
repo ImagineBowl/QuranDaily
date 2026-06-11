@@ -55,16 +55,19 @@ struct DownloadQuranUseCase: Sendable {
             return
         }
 
-        progressHandler(.downloading(message: "Fetching Arabic Quran...", fraction: 0.1))
+        progressHandler(.downloading(message: "Fetching Uthmani Quran...", fraction: 0.1))
         let arabic = try await apiClient.fetchArabicQuran()
 
-        progressHandler(.downloading(message: "Fetching Urdu translation...", fraction: 0.4))
+        progressHandler(.downloading(message: "Fetching Indo-Pak Quran...", fraction: 0.3))
+        let indopak = try await apiClient.fetchIndopakQuran()
+
+        progressHandler(.downloading(message: "Fetching Urdu translation...", fraction: 0.5))
         let urdu = try await apiClient.fetchUrduTranslation()
 
         progressHandler(.downloading(message: "Fetching metadata...", fraction: 0.7))
         let meta = try await apiClient.fetchMeta()
 
-        let merged = mergeQuranData(arabic: arabic, urdu: urdu, meta: meta)
+        let merged = mergeQuranData(arabic: arabic, indopak: indopak, urdu: urdu, meta: meta)
 
         progressHandler(.downloading(message: "Saving locally...", fraction: 0.9))
         try await quranRepository.saveQuranData(
@@ -78,6 +81,7 @@ struct DownloadQuranUseCase: Sendable {
 
     private func mergeQuranData(
         arabic: QuranEditionResponse,
+        indopak: IndopakQuranResponse,
         urdu: QuranEditionResponse,
         meta: MetaResponse
     ) -> StoredQuranBundle {
@@ -86,6 +90,7 @@ struct DownloadQuranUseCase: Sendable {
                 (surah.number, Dictionary(uniqueKeysWithValues: surah.ayahs.map { ($0.numberInSurah, $0.text) }))
             }
         )
+        let indopakTextByReference = Self.indopakTextLookup(from: indopak.data.ayahs)
 
         var ayahsBySurah: [Int: [Ayah]] = [:]
         var surahs: [Surah] = []
@@ -104,11 +109,15 @@ struct DownloadQuranUseCase: Sendable {
 
             let urduMap = urduAyahsBySurah[apiSurah.number] ?? [:]
             let ayahs = apiSurah.ayahs.map { apiAyah in
-                Ayah(
+                let referenceKey = "\(apiSurah.number):\(apiAyah.numberInSurah)"
+                return Ayah(
                     number: apiAyah.number,
                     numberInSurah: apiAyah.numberInSurah,
                     surahNumber: apiSurah.number,
-                    arabicText: apiAyah.text.trimmingCharacters(in: .whitespacesAndNewlines),
+                    arabicTextUthmani: apiAyah.text
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                        .sanitizedForQuranDisplay,
+                    arabicTextIndopak: indopakTextByReference[referenceKey] ?? "",
                     urduText: urduMap[apiAyah.numberInSurah] ?? "",
                     juz: apiAyah.juz,
                     page: apiAyah.page
@@ -127,6 +136,18 @@ struct DownloadQuranUseCase: Sendable {
             juzs: juzs
         )
     }
+
+    private static func indopakTextLookup(from ayahs: [IndopakAyah]) -> [String: String] {
+        var lookup: [String: String] = [:]
+        lookup.reserveCapacity(ayahs.count)
+
+        for ayah in ayahs {
+            let trimmed = ayah.text.trimmingCharacters(in: .whitespacesAndNewlines)
+            lookup[ayah.verseKey] = trimmed.sanitizedForQuranDisplay
+        }
+
+        return lookup
+    }
 }
 
 struct SearchQuranUseCase: Sendable {
@@ -136,7 +157,11 @@ struct SearchQuranUseCase: Sendable {
         self.quranRepository = quranRepository
     }
 
-    func execute(query: String, mode: SearchMode = .surah) async throws -> [SearchResult] {
+    func execute(
+        query: String,
+        mode: SearchMode = .surah,
+        script: QuranScriptChoice = .uthmani
+    ) async throws -> [SearchResult] {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
 
@@ -144,9 +169,9 @@ struct SearchQuranUseCase: Sendable {
         case .surah:
             return try await searchSurahs(query: trimmed)
         case .ayah:
-            return try await searchAyahReference(query: trimmed)
+            return try await searchAyahReference(query: trimmed, script: script)
         case .text:
-            return try await searchText(query: trimmed)
+            return try await searchText(query: trimmed, script: script)
         }
     }
 
@@ -162,7 +187,7 @@ struct SearchQuranUseCase: Sendable {
                     surahNumber: surah.number,
                     ayahNumber: 1,
                     surahName: surah.englishName,
-                    arabicText: surah.name,
+                    arabicText: surah.name.sanitizedForQuranDisplay,
                     urduText: surah.englishNameTranslation,
                     matchType: .surahNumber
                 )
@@ -201,7 +226,7 @@ struct SearchQuranUseCase: Sendable {
                         surahNumber: surah.number,
                         ayahNumber: 1,
                         surahName: surah.englishName,
-                        arabicText: surah.name,
+                        arabicText: surah.name.sanitizedForQuranDisplay,
                         urduText: surah.englishNameTranslation,
                         matchType: .surahName
                     )
@@ -212,7 +237,7 @@ struct SearchQuranUseCase: Sendable {
         return deduplicated(results)
     }
 
-    private func searchAyahReference(query: String) async throws -> [SearchResult] {
+    private func searchAyahReference(query: String, script: QuranScriptChoice) async throws -> [SearchResult] {
         let surahs = try await quranRepository.fetchSurahs()
         guard let reference = AyahReferenceParser.parse(query, surahs: surahs) else { return [] }
 
@@ -234,7 +259,7 @@ struct SearchQuranUseCase: Sendable {
                 surahNumber: ayah.surahNumber,
                 ayahNumber: ayah.numberInSurah,
                 surahName: surah?.englishName ?? "Surah \(ayah.surahNumber)",
-                arabicText: ayah.arabicText,
+                arabicText: ayah.arabicText(for: script),
                 urduText: ayah.urduText,
                 matchType: .ayahReference,
                 absoluteAyahNumber: ayah.number
@@ -242,21 +267,21 @@ struct SearchQuranUseCase: Sendable {
         ]
     }
 
-    private func searchText(query: String) async throws -> [SearchResult] {
+    private func searchText(query: String, script: QuranScriptChoice) async throws -> [SearchResult] {
         let surahs = try await quranRepository.fetchSurahs()
         let normalizedQuery = query.lowercased()
         var results: [SearchResult] = []
 
         for surah in surahs {
             let ayahs = try await quranRepository.fetchAyahs(forSurah: surah.number)
-            for ayah in ayahs where matchesText(ayah, query: normalizedQuery) {
+            for ayah in ayahs where matchesText(ayah, query: normalizedQuery, script: script) {
                 results.append(
                     SearchResult(
                         id: "text-\(ayah.number)",
                         surahNumber: ayah.surahNumber,
                         ayahNumber: ayah.numberInSurah,
                         surahName: surah.englishName,
-                        arabicText: ayah.arabicText,
+                        arabicText: ayah.arabicText(for: script),
                         urduText: ayah.urduText,
                         matchType: .text,
                         absoluteAyahNumber: ayah.number
@@ -268,8 +293,8 @@ struct SearchQuranUseCase: Sendable {
         return deduplicated(results)
     }
 
-    private func matchesText(_ ayah: Ayah, query: String) -> Bool {
-        ayah.arabicText.contains(query) ||
+    private func matchesText(_ ayah: Ayah, query: String, script: QuranScriptChoice) -> Bool {
+        ayah.arabicText(for: script).contains(query) ||
         ayah.urduText.lowercased().contains(query)
     }
 

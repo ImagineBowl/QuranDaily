@@ -31,6 +31,7 @@ final class DownloadQuranUseCaseTests: XCTestCase {
         storage = MockStorageService()
         apiClient = MockAPIClient()
         apiClient.arabicResponse = TestFixtures.makeArabicResponse()
+        apiClient.indopakResponse = TestFixtures.makeIndopakResponse()
         apiClient.urduResponse = TestFixtures.makeUrduResponse()
         apiClient.metaResponse = TestFixtures.makeMetaResponse()
         repository = QuranRepository(storage: storage)
@@ -55,6 +56,7 @@ final class DownloadQuranUseCaseTests: XCTestCase {
 
         let ayahs = try await repository.fetchAyahs(forSurah: 1)
         XCTAssertEqual(ayahs.first?.urduText, TestFixtures.ayah1.urduText)
+        XCTAssertEqual(ayahs.first?.arabicTextIndopak, TestFixtures.ayah1.arabicTextIndopak)
     }
 
     func testExecuteSkipsDownloadWhenAlreadyStored() async throws {

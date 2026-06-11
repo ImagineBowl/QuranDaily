@@ -55,6 +55,12 @@ final class SettingsViewModel {
         await settingsRepository.saveSettings(settings)
     }
 
+    func updateQuranScript(_ script: QuranScriptChoice) async {
+        settings.quranScript = script
+        settings.arabicFont = script.preferredArabicFont
+        await settingsRepository.saveSettings(settings)
+    }
+
     func updateArabicFont(_ font: ArabicFontChoice) async {
         settings.arabicFont = font
         await settingsRepository.saveSettings(settings)

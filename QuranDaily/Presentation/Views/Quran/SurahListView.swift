@@ -178,7 +178,7 @@ struct ContinueReadingCard: View {
                     .font(AppTheme.bodyFont(size: 14))
                     .foregroundStyle(.white.opacity(0.9))
                 Spacer()
-                Text(surah.name)
+                Text(surah.name.sanitizedForQuranDisplay)
                     .font(AppTheme.arabicFont(size: 18))
                     .foregroundStyle(.white)
             }
@@ -241,7 +241,7 @@ struct SurahRowView: View {
 
             Spacer()
 
-            Text(surah.name)
+            Text(surah.name.sanitizedForQuranDisplay)
                 .font(AppTheme.arabicFont(size: 22, choice: arabicFont))
                 .multilineTextAlignment(.trailing)
         }

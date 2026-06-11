@@ -15,7 +15,11 @@ final class QuranRepository: QuranRepositoryProtocol, @unchecked Sendable {
     }
 
     func isQuranDownloaded() async -> Bool {
-        await storage.fileExists(StoragePaths.quranBundle)
+        guard await storage.fileExists(StoragePaths.quranBundle),
+              let bundle = try? await loadBundle() else {
+            return false
+        }
+        return bundle.hasIndopakText
     }
 
     func fetchSurahs() async throws -> [Surah] {

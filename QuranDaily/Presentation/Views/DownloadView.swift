@@ -22,7 +22,7 @@ struct DownloadView: View {
                 .font(AppTheme.titleFont(size: 28))
                 .multilineTextAlignment(.center)
 
-            Text("Download Quran data once to read offline with Arabic text and Urdu translation.")
+            Text("Download Quran data once to read offline with Uthmani and Indo-Pak Arabic text plus Urdu translation.")
                 .font(AppTheme.bodyFont(size: 20))
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

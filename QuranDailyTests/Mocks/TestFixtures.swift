@@ -55,6 +55,7 @@ final class MockStorageService: StorageServiceProtocol, @unchecked Sendable {
 
 final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
     var arabicResponse: QuranEditionResponse?
+    var indopakResponse: IndopakQuranResponse?
     var urduResponse: QuranEditionResponse?
     var metaResponse: MetaResponse?
     var shouldThrow = false
@@ -63,6 +64,12 @@ final class MockAPIClient: APIClientProtocol, @unchecked Sendable {
         if shouldThrow { throw QuranError.invalidResponse }
         guard let arabicResponse else { throw QuranError.invalidResponse }
         return arabicResponse
+    }
+
+    func fetchIndopakQuran() async throws -> IndopakQuranResponse {
+        if shouldThrow { throw QuranError.invalidResponse }
+        guard let indopakResponse else { throw QuranError.invalidResponse }
+        return indopakResponse
     }
 
     func fetchUrduTranslation() async throws -> QuranEditionResponse {
@@ -132,7 +139,8 @@ enum TestFixtures {
         number: 1,
         numberInSurah: 1,
         surahNumber: 1,
-        arabicText: "بِسْمِ ٱللَّهِ",
+        arabicTextUthmani: "بِسْمِ ٱللَّهِ",
+        arabicTextIndopak: "بِسۡمِ اللهِ",
         urduText: "شروع الله کا نام لے کر",
         juz: 1,
         page: 1
@@ -142,7 +150,8 @@ enum TestFixtures {
         number: 2,
         numberInSurah: 2,
         surahNumber: 1,
-        arabicText: "ٱلْحَمْدُ لِلَّهِ",
+        arabicTextUthmani: "ٱلْحَمْدُ لِلَّهِ",
+        arabicTextIndopak: "اَلۡحَمۡدُ لِلّٰهِ",
         urduText: "سب تعریفیں",
         juz: 1,
         page: 1
@@ -171,10 +180,23 @@ enum TestFixtures {
                         englishNameTranslation: surah1.englishNameTranslation,
                         revelationType: surah1.revelationType,
                         ayahs: [
-                            APIAyah(number: 1, text: ayah1.arabicText, numberInSurah: 1, juz: 1, page: 1),
-                            APIAyah(number: 2, text: ayah2.arabicText, numberInSurah: 2, juz: 1, page: 1)
+                            APIAyah(number: 1, text: ayah1.arabicTextUthmani, numberInSurah: 1, juz: 1, page: 1),
+                            APIAyah(number: 2, text: ayah2.arabicTextUthmani, numberInSurah: 2, juz: 1, page: 1)
                         ]
                     )
+                ]
+            )
+        )
+    }
+
+    static func makeIndopakResponse() -> IndopakQuranResponse {
+        IndopakQuranResponse(
+            code: 200,
+            status: "OK",
+            data: IndopakQuranData(
+                ayahs: [
+                    IndopakAyah(verseKey: "1:1", text: ayah1.arabicTextIndopak),
+                    IndopakAyah(verseKey: "1:2", text: ayah2.arabicTextIndopak)
                 ]
             )
         )

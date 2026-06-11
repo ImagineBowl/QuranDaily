@@ -34,6 +34,7 @@ final class SearchAudioViewModel {
     var currentTime: TimeInterval = 0
     var duration: TimeInterval = 0
     var recentListens: [RecentListen] = []
+    var quranScript: QuranScriptChoice = .uthmani
 
     private var progressTimer: Timer?
     private var searchTask: Task<Void, Never>?
@@ -189,7 +190,11 @@ final class SearchAudioViewModel {
         searchErrorMessage = nil
 
         do {
-            results = try await searchQuranUseCase.execute(query: trimmed, mode: searchMode)
+            results = try await searchQuranUseCase.execute(
+                query: trimmed,
+                mode: searchMode,
+                script: quranScript
+            )
         } catch {
             searchErrorMessage = error.localizedDescription
             results = []
@@ -342,7 +347,9 @@ final class SearchAudioViewModel {
                     ayahInSurah: ayahNumber
                 )
                 guard !Task.isCancelled else { return }
-                currentAyahArabicPreview = ayah.map { Self.truncatedAyahPreview($0.arabicText) }
+                currentAyahArabicPreview = ayah.map {
+                    Self.truncatedAyahPreview($0.arabicText(for: quranScript))
+                }
             } catch {
                 currentAyahArabicPreview = nil
             }
@@ -350,7 +357,7 @@ final class SearchAudioViewModel {
     }
 
     private static func truncatedAyahPreview(_ text: String, maxLength: Int = 72) -> String {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = text.sanitizedForQuranDisplay.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.count > maxLength else { return trimmed }
         return String(trimmed.prefix(maxLength)) + "…"
     }

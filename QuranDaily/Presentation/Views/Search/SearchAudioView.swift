@@ -362,7 +362,7 @@ struct SurahPickerSelectionRow: View {
 
             Spacer()
 
-            Text(surah.name)
+            Text(surah.name.sanitizedForQuranDisplay)
                 .font(AppTheme.arabicFont(size: 20, choice: arabicFont))
                 .multilineTextAlignment(.trailing)
 
@@ -471,7 +471,7 @@ struct AudioPlayerSheet: View {
                         .foregroundStyle(.white.opacity(0.85))
 
                     if let surah = displayedSurah {
-                        Text(surah.name)
+                        Text(surah.name.sanitizedForQuranDisplay)
                             .font(AppTheme.arabicFont(size: 40))
                             .foregroundStyle(.white)
                             .multilineTextAlignment(.center)

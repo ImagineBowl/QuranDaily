@@ -85,7 +85,7 @@ struct BookmarkRowView: View {
             }
 
             if !bookmark.arabicPreview.isEmpty {
-                Text(bookmark.arabicPreview)
+                Text(bookmark.arabicPreview.sanitizedForQuranDisplay)
                     .font(AppTheme.arabicFont(size: 20, choice: arabicFont))
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .trailing)

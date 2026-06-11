@@ -94,6 +94,7 @@ protocol RecentListenRepositoryProtocol: Sendable {
 
 protocol APIClientProtocol: Sendable {
     func fetchArabicQuran() async throws -> QuranEditionResponse
+    func fetchIndopakQuran() async throws -> IndopakQuranResponse
     func fetchUrduTranslation() async throws -> QuranEditionResponse
     func fetchMeta() async throws -> MetaResponse
     func surahAudioURL(for surahNumber: Int) -> URL

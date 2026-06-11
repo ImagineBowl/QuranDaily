@@ -30,13 +30,34 @@ enum AppThemeMode: String, Codable, CaseIterable, Sendable {
     }
 }
 
+enum QuranScriptChoice: String, Codable, CaseIterable, Sendable {
+    case uthmani
+    case indopak
+
+    var displayName: String {
+        switch self {
+        case .uthmani: "Uthmani (Madina)"
+        case .indopak: "Indo-Pak"
+        }
+    }
+
+    var preferredArabicFont: ArabicFontChoice {
+        switch self {
+        case .uthmani: .amiriQuran
+        case .indopak: .notoNaskhArabic
+        }
+    }
+}
+
 enum ArabicFontChoice: String, Codable, CaseIterable, Sendable {
     case amiriQuran
+    case notoNaskhArabic
     case systemSerif
 
     var displayName: String {
         switch self {
         case .amiriQuran: "Amiri Quran"
+        case .notoNaskhArabic: "Noto Naskh Arabic"
         case .systemSerif: "System Serif"
         }
     }
@@ -44,6 +65,7 @@ enum ArabicFontChoice: String, Codable, CaseIterable, Sendable {
     var postScriptName: String? {
         switch self {
         case .amiriQuran: "AmiriQuran-Regular"
+        case .notoNaskhArabic: "NotoNaskhArabic-Regular"
         case .systemSerif: nil
         }
     }
@@ -72,6 +94,7 @@ struct AppSettings: Codable, Hashable, Sendable {
     var fontSize: Double
     var theme: AppThemeMode
     var showEnglishTranslation: Bool
+    var quranScript: QuranScriptChoice
     var arabicFont: ArabicFontChoice
     var urduFont: UrduFontChoice
 
@@ -79,7 +102,8 @@ struct AppSettings: Codable, Hashable, Sendable {
         fontSize: 22,
         theme: .dark,
         showEnglishTranslation: false,
-        arabicFont: .amiriQuran,
+        quranScript: .indopak,
+        arabicFont: .notoNaskhArabic,
         urduFont: .notoNastaliq
     )
 
@@ -87,12 +111,14 @@ struct AppSettings: Codable, Hashable, Sendable {
         fontSize: Double,
         theme: AppThemeMode,
         showEnglishTranslation: Bool,
-        arabicFont: ArabicFontChoice = .amiriQuran,
+        quranScript: QuranScriptChoice = .indopak,
+        arabicFont: ArabicFontChoice = .notoNaskhArabic,
         urduFont: UrduFontChoice = .notoNastaliq
     ) {
         self.fontSize = fontSize
         self.theme = theme
         self.showEnglishTranslation = showEnglishTranslation
+        self.quranScript = quranScript
         self.arabicFont = arabicFont
         self.urduFont = urduFont
     }
@@ -102,7 +128,8 @@ struct AppSettings: Codable, Hashable, Sendable {
         fontSize = try container.decode(Double.self, forKey: .fontSize)
         theme = try container.decode(AppThemeMode.self, forKey: .theme)
         showEnglishTranslation = try container.decodeIfPresent(Bool.self, forKey: .showEnglishTranslation) ?? false
-        arabicFont = try container.decodeIfPresent(ArabicFontChoice.self, forKey: .arabicFont) ?? .amiriQuran
+        quranScript = try container.decodeIfPresent(QuranScriptChoice.self, forKey: .quranScript) ?? .indopak
+        arabicFont = try container.decodeIfPresent(ArabicFontChoice.self, forKey: .arabicFont) ?? .notoNaskhArabic
         urduFont = try container.decodeIfPresent(UrduFontChoice.self, forKey: .urduFont) ?? .notoNastaliq
     }
 }

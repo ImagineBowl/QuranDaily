@@ -76,7 +76,7 @@ final class SurahDetailViewModel {
                     surahNumber: ayah.surahNumber,
                     ayahNumber: ayah.numberInSurah,
                     surahName: surah.englishName,
-                    arabicPreview: String(ayah.arabicText.prefix(80))
+                    arabicPreview: String(ayah.arabicText(for: settings.quranScript).prefix(80))
                 )
                 try await bookmarkRepository.addBookmark(bookmark)
             }

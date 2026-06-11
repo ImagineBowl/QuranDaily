@@ -7,12 +7,17 @@
 
 import AVFoundation
 import Foundation
+import UIKit
 
 @MainActor
 final class AudioPlayerService: NSObject, AudioPlayerProtocol {
     private var player: AVPlayer?
     private var endObserver: NSObjectProtocol?
     private var timeObserver: Any?
+    private var interruptionObserver: NSObjectProtocol?
+    private var becameActiveObserver: NSObjectProtocol?
+    private var remoteCommandsConfigured = false
+    private var lastNowPlayingUpdate: TimeInterval = 0
     private(set) var currentSurahNumber: Int?
     private(set) var currentAyahInSurah: Int?
     private var ayahSequenceEnd: Int?
@@ -40,6 +45,8 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
         self.audioRepository = audioRepository
         super.init()
         configureAudioSession()
+        setupRemoteCommands()
+        setupLifecycleObservers()
     }
 
     func pause() {
@@ -57,6 +64,7 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
     func seek(to time: TimeInterval) {
         let cmTime = CMTime(seconds: time, preferredTimescale: 600)
         player?.seek(to: cmTime)
+        updateNowPlaying()
     }
 
     func stop() {
@@ -65,6 +73,7 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
         currentAyahInSurah = nil
         ayahSequenceEnd = nil
         stopsAtSurahEnd = false
+        NowPlayingManager.shared.clear()
         notifyPlaybackUpdate()
     }
 
@@ -147,6 +156,7 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
 
         let item = AVPlayerItem(url: url)
         let avPlayer = AVPlayer(playerItem: item)
+        avPlayer.automaticallyWaitsToMinimizeStalling = false
         player = avPlayer
         observeEnd(of: item)
         addPeriodicTimeObserver(to: avPlayer)
@@ -163,9 +173,6 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
 
     private func addPeriodicTimeObserver(to player: AVPlayer) {
         removeTimeObserver()
-        // Frequent updates so the mini-player reflects the new item's duration and
-        // position as soon as an ayah transition starts, instead of waiting on the
-        // slower drift-sync timer.
         let interval = CMTime(seconds: 0.3, preferredTimescale: 600)
         timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] _ in
             Task { @MainActor in
@@ -231,11 +238,98 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
         }
     }
 
+    private func setupRemoteCommands() {
+        guard !remoteCommandsConfigured else { return }
+        remoteCommandsConfigured = true
+
+        NowPlayingManager.shared.configureRemoteCommands(
+            play: { [weak self] in
+                Task { @MainActor in self?.resume() }
+            },
+            pause: { [weak self] in
+                Task { @MainActor in self?.pause() }
+            },
+            togglePlayPause: { [weak self] in
+                Task { @MainActor in
+                    guard let self else { return }
+                    if self.isPlaying {
+                        self.pause()
+                    } else {
+                        self.resume()
+                    }
+                }
+            },
+            playNext: { [weak self] in
+                Task { @MainActor in
+                    try? await self?.playNext()
+                }
+            },
+            playPrevious: { [weak self] in
+                Task { @MainActor in
+                    try? await self?.playPrevious()
+                }
+            },
+            changePlaybackPosition: { [weak self] time in
+                Task { @MainActor in self?.seek(to: time) }
+            }
+        )
+    }
+
+    private func setupLifecycleObservers() {
+        #if os(iOS)
+        interruptionObserver = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(),
+            queue: .main
+        ) { [weak self] notification in
+            let typeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+            let optionsValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+            Task { @MainActor in
+                self?.handleAudioInterruption(typeValue: typeValue, optionsValue: optionsValue)
+            }
+        }
+
+        becameActiveObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                guard let self, self.isPlaying else { return }
+                self.configureAudioSession()
+            }
+        }
+        #endif
+    }
+
+    private func handleAudioInterruption(typeValue: UInt?, optionsValue: UInt?) {
+        #if os(iOS)
+        guard let typeValue, let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+            return
+        }
+
+        switch type {
+        case .began:
+            break
+        case .ended:
+            guard let optionsValue else { return }
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume) {
+                configureAudioSession()
+                player?.play()
+                notifyPlaybackUpdate()
+            }
+        @unknown default:
+            break
+        }
+        #endif
+    }
+
     private func configureAudioSession() {
         #if os(iOS)
         let session = AVAudioSession.sharedInstance()
         do {
-            try session.setCategory(.playback, mode: .default, options: [])
+            try session.setCategory(.playback, mode: .spokenAudio, options: [])
             try session.setActive(true, options: [])
         } catch {
             // Session setup failed; playback may still work on some devices.
@@ -244,6 +338,34 @@ final class AudioPlayerService: NSObject, AudioPlayerProtocol {
     }
 
     private func notifyPlaybackUpdate() {
+        updateNowPlayingIfNeeded()
         onPlaybackUpdate?()
+    }
+
+    private func updateNowPlayingIfNeeded() {
+        let now = Date().timeIntervalSinceReferenceDate
+        guard now - lastNowPlayingUpdate >= 0.5 else { return }
+        lastNowPlayingUpdate = now
+        updateNowPlaying()
+    }
+
+    private func updateNowPlaying() {
+        guard let surah = currentSurahNumber else {
+            NowPlayingManager.shared.clear()
+            return
+        }
+
+        var title = "Surah \(surah)"
+        if let ayah = currentAyahInSurah {
+            title += " · Ayah \(ayah)"
+        }
+
+        NowPlayingManager.shared.updateNowPlaying(
+            title: title,
+            artist: "Mishari Alafasy",
+            duration: duration,
+            elapsed: currentTime,
+            isPlaying: isPlaying
+        )
     }
 }

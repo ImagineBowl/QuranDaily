@@ -52,7 +52,8 @@ final class QuranRepositoryTests: XCTestCase {
 
         let ayahs = try await repository.fetchAyahs(forSurah: 1)
         XCTAssertEqual(ayahs.count, 2)
-        XCTAssertEqual(ayahs.first?.arabicText, TestFixtures.ayah1.arabicText)
+        XCTAssertEqual(ayahs.first?.arabicTextUthmani, TestFixtures.ayah1.arabicTextUthmani)
+        XCTAssertEqual(ayahs.first?.arabicTextIndopak, TestFixtures.ayah1.arabicTextIndopak)
     }
 
     func testFetchAyahsThrowsWhenSurahMissing() async throws {

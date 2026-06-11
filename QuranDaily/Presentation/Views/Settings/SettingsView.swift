@@ -33,6 +33,17 @@ struct SettingsView: View {
                     }
                     .padding(.vertical, 8)
 
+                    Picker("Arabic Script", selection: Binding(
+                        get: { viewModel.settings.quranScript },
+                        set: { newValue in
+                            Task { await viewModel.updateQuranScript(newValue) }
+                        }
+                    )) {
+                        ForEach(QuranScriptChoice.allCases, id: \.self) { script in
+                            Text(script.displayName).tag(script)
+                        }
+                    }
+
                     Picker("Arabic Font", selection: Binding(
                         get: { viewModel.settings.arabicFont },
                         set: { newValue in
@@ -152,7 +163,7 @@ struct SettingsView: View {
                         Text(AppInfo.versionDisplay)
                     }
                     LabeledContent("Data Source") {
-                        Text("AlQuran Cloud")
+                        Text("AlQuran Cloud, islamic.app")
                     }
 
                     Link(destination: AppInfo.privacyPolicyURL) {

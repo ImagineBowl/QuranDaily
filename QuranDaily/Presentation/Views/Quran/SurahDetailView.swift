@@ -51,6 +51,7 @@ struct SurahDetailView: View {
                                 AyahCardView(
                                     ayah: ayah,
                                     fontSize: viewModel.settings.fontSize,
+                                    quranScript: viewModel.settings.quranScript,
                                     arabicFont: viewModel.settings.arabicFont,
                                     urduFont: viewModel.settings.urduFont,
                                     isBookmarked: viewModel.isBookmarked(ayah),
@@ -185,6 +186,7 @@ struct SurahDetailView: View {
 struct AyahCardView: View {
     let ayah: Ayah
     let fontSize: Double
+    var quranScript: QuranScriptChoice = .uthmani
     var arabicFont: ArabicFontChoice = .amiriQuran
     var urduFont: UrduFontChoice = .notoNastaliq
     let isBookmarked: Bool
@@ -209,7 +211,7 @@ struct AyahCardView: View {
                 .accessibilityLabel(isBookmarked ? "Remove bookmark" : "Bookmark ayah")
             }
 
-            Text(ayah.arabicText)
+            Text(ayah.arabicText(for: quranScript))
                 .font(AppTheme.arabicFont(size: fontSize + 4, choice: arabicFont))
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)

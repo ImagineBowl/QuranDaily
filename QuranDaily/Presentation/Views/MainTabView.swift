@@ -79,9 +79,11 @@ struct MainTabView: View {
         .preferredColorScheme(appSettings.theme.colorScheme)
         .task {
             appSettings = await container.settingsRepository.fetchSettings()
+            searchViewModel.quranScript = appSettings.quranScript
         }
         .onChange(of: settingsViewModel.settings) { _, newValue in
             appSettings = newValue
+            searchViewModel.quranScript = newValue.quranScript
         }
     }
 }

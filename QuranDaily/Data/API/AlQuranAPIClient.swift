@@ -9,6 +9,7 @@ import Foundation
 
 final class AlQuranAPIClient: APIClientProtocol, Sendable {
     private let baseURL = URL(string: "https://api.alquran.cloud/v1")!
+    private let indopakURL = URL(string: "https://api.islamic.app/v1/quran/verses/indopak")!
     private let session: URLSession
 
     init(session: URLSession = .shared) {
@@ -21,6 +22,10 @@ final class AlQuranAPIClient: APIClientProtocol, Sendable {
 
     func fetchUrduTranslation() async throws -> QuranEditionResponse {
         try await fetchEdition(named: "ur.jalandhry")
+    }
+
+    func fetchIndopakQuran() async throws -> IndopakQuranResponse {
+        try await performRequest(url: indopakURL)
     }
 
     func fetchMeta() async throws -> MetaResponse {
