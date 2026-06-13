@@ -14,7 +14,7 @@ import XCTest
 
 final class QuranArabicTextSanitizerTests: XCTestCase {
     func testSanitizedForDisplayRemovesPrivateUseAreaGlyphs() {
-        let raw = "الٓر\u200b\ue01e تِلۡكَ"
+        let raw = "الٓر\u{200B}\u{E01E} تِلۡكَ"
         let sanitized = QuranArabicTextSanitizer.sanitizedForDisplay(raw)
 
         XCTAssertFalse(sanitized.contains("\u{E01E}"))
@@ -23,7 +23,7 @@ final class QuranArabicTextSanitizerTests: XCTestCase {
     }
 
     func testSanitizedForDisplayRemovesVerseEndMarkerGlyph() {
-        let raw = "الۡعٰلَمِيۡنَ\ue022\u200f"
+        let raw = "الۡعٰلَمِيۡنَ\u{E022}\u{200F}"
         let sanitized = QuranArabicTextSanitizer.sanitizedForDisplay(raw)
 
         XCTAssertFalse(sanitized.contains("\u{E022}"))

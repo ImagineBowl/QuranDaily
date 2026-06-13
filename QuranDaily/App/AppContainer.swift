@@ -28,6 +28,7 @@ final class AppContainer {
     let searchQuranUseCase: SearchQuranUseCase
     let storageInfoUseCase: StorageInfoUseCase
     let clearCacheUseCase: ClearCacheUseCase
+    let appUpdateService: AppUpdateServiceProtocol
 
     let audioPlayer: AudioPlayerService
 
@@ -72,6 +73,7 @@ final class AppContainer {
             quranRepository: quranRepo,
             audioRepository: audioRepo
         )
+        self.appUpdateService = AppUpdateService()
 
         self.audioPlayer = AudioPlayerService(audioRepository: audioRepo)
     }

@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @Bindable var viewModel: SettingsViewModel
     @Binding var appSettings: AppSettings
+    @Bindable var appUpdateViewModel: AppUpdateViewModel
 
     var body: some View {
         NavigationStack {
@@ -162,6 +163,26 @@ struct SettingsView: View {
                     LabeledContent("Version") {
                         Text(AppInfo.versionDisplay)
                     }
+
+                    Button {
+                        Task { await appUpdateViewModel.checkForUpdates() }
+                    } label: {
+                        HStack {
+                            Text("Check for Updates")
+                            Spacer()
+                            if appUpdateViewModel.isChecking {
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(appUpdateViewModel.isChecking)
+
+                    if let updateStatus = appUpdateViewModel.checkStatusMessage {
+                        Text(updateStatus)
+                            .font(AppTheme.bodyFont(size: 15))
+                            .foregroundStyle(.secondary)
+                    }
+
                     LabeledContent("Data Source") {
                         Text("AlQuran Cloud, islamic.app")
                     }

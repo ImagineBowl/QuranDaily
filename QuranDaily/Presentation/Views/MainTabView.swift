@@ -14,10 +14,14 @@ struct MainTabView: View {
     @State private var searchViewModel: SearchAudioViewModel
     @State private var bookmarksViewModel: BookmarksViewModel
     @State private var settingsViewModel: SettingsViewModel
+    @State private var appUpdateViewModel: AppUpdateViewModel
     @State private var appSettings: AppSettings = .default
 
     init(container: AppContainer) {
         self.container = container
+        _appUpdateViewModel = State(initialValue: AppUpdateViewModel(
+            appUpdateService: container.appUpdateService
+        ))
         _quranViewModel = State(initialValue: QuranViewModel(
             fetchQuranUseCase: container.fetchQuranUseCase,
             readingPositionRepository: container.readingPositionRepository
@@ -71,7 +75,11 @@ struct MainTabView: View {
                     Label("Bookmarks", systemImage: "bookmark.fill")
                 }
 
-            SettingsView(viewModel: settingsViewModel, appSettings: $appSettings)
+            SettingsView(
+                viewModel: settingsViewModel,
+                appSettings: $appSettings,
+                appUpdateViewModel: appUpdateViewModel
+            )
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
@@ -80,11 +88,35 @@ struct MainTabView: View {
         .task {
             appSettings = await container.settingsRepository.fetchSettings()
             searchViewModel.quranScript = appSettings.quranScript
+            await appUpdateViewModel.checkOnLaunch()
+        }
+        .alert("Update Available", isPresented: updateAlertBinding) {
+            Button("Update") {
+                appUpdateViewModel.openAppStore()
+            }
+            Button("Later", role: .cancel) {
+                appUpdateViewModel.dismissPendingUpdate()
+            }
+        } message: {
+            if let prompt = appUpdateViewModel.pendingPrompt {
+                Text(prompt.message)
+            }
         }
         .onChange(of: settingsViewModel.settings) { _, newValue in
             appSettings = newValue
             searchViewModel.quranScript = newValue.quranScript
         }
+    }
+
+    private var updateAlertBinding: Binding<Bool> {
+        Binding(
+            get: { appUpdateViewModel.pendingPrompt != nil },
+            set: { isPresented in
+                if !isPresented {
+                    appUpdateViewModel.dismissPendingUpdate()
+                }
+            }
+        )
     }
 }
 
